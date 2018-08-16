@@ -1,0 +1,109 @@
+plugins {
+  id 'java'
+  id 'maven'
+  id 'signing'
+  id 'net.minecrell.licenser' version '0.4'
+}
+
+group 'net.kyori'
+version '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+  options.compilerArgs += ['-Xlint:all', '-Xlint:-path', '-parameters']
+  options.deprecation = true
+  options.encoding = 'UTF-8'
+}
+
+test {
+  useJUnitPlatform()
+}
+
+license {
+  header project.file('header.txt')
+  include '**/*.java'
+  newLine false
+}
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+task javadocJar(type: Jar) {
+  classifier 'javadoc'
+  from javadoc
+}
+
+task sourcesJar(type: Jar) {
+  classifier 'sources'
+  from sourceSets.main.allSource
+}
+
+artifacts {
+  archives javadocJar
+  archives sourcesJar
+}
+
+signing {
+  required { !project.version.endsWith('-SNAPSHOT') && gradle.taskGraph.hasTask(':uploadArchives') && project.hasProperty('signing.keyId') }
+  sign configurations.archives
+}
+
+jar {
+  manifest.attributes(
+    'Automatic-Module-Name': 'net.kyori.lambda'
+  )
+}
+
+if(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
+  uploadArchives {
+    enabled = System.getenv('TRAVIS') == null || project.version.endsWith('-SNAPSHOT')
+
+    repositories {
+      mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+          authentication(userName: sonatypeUsername, password: sonatypePassword)
+        }
+
+        snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
+          authentication(userName: sonatypeUsername, password: sonatypePassword)
+        }
+
+        pom.project {
+          description 'A collection of utilities.'
+          name project.name
+          url 'https://github.com/KyoriPowered/lambda/'
+
+          developers {
+            developer {
+              name 'kashike'
+            }
+          }
+
+          issueManagement {
+            system 'GitHub Issues'
+            url 'https://github.com/KyoriPowered/lambda/issues'
+          }
+
+          licenses {
+            license {
+              name 'MIT License'
+              url 'https://opensource.org/licenses/MIT'
+            }
+          }
+
+          scm {
+            connection 'scm:git@github.com:KyoriPowered/lambda.git'
+            developerConnection 'scm:git@github.com:KyoriPowered/lambda.git'
+            url 'https://github.com/KyoriPowered/lambda/'
+          }
+        }
+      }
+    }
+  }
+}
