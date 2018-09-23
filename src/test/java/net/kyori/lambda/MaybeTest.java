@@ -80,9 +80,9 @@ class MaybeTest {
   }
 
   @Test
-  void testGetOrElse() {
-    assertEquals("bar", Maybe.nothing().getOrElse("bar"));
-    assertEquals("foo", Maybe.just("foo").getOrElse("bar"));
+  void testGetOrDefault() {
+    assertEquals("bar", Maybe.nothing().getOrDefault("bar"));
+    assertEquals("foo", Maybe.just("foo").getOrDefault("bar"));
   }
 
   @Test

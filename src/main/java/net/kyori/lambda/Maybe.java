@@ -128,12 +128,12 @@ public interface Maybe<T> extends Iterable<T> {
   T get();
 
   /**
-   * Gets the value if present, otherwise returns {@code other}.
+   * Gets the value if present, otherwise returns {@code defaultValue}.
    *
-   * @param other the other value
-   * @return the value if present, otherwise {@code other}
+   * @param defaultValue the default value
+   * @return the value if present, otherwise {@code defaultValue}
    */
-  T getOrElse(final @Nullable T other);
+  T getOrDefault(final @Nullable T defaultValue);
 
   /**
    * Gets the value if present, otherwise returns a value supplied by {@code other}.
@@ -282,13 +282,18 @@ public interface Maybe<T> extends Iterable<T> {
     }
 
     @Override
-    public T getOrElse(final @Nullable T other) {
-      return other;
+    public T getOrDefault(final @Nullable T defaultValue) {
+      return defaultValue;
     }
 
     @Override
     public T getOrGet(final @NonNull Supplier<? extends T> other) {
       return other.get();
+    }
+
+    @Override
+    public <X extends Throwable> T getOrThrow(final @NonNull Supplier<X> supplier) throws X {
+      throw supplier.get();
     }
 
     @Override
@@ -301,11 +306,6 @@ public interface Maybe<T> extends Iterable<T> {
     @SuppressWarnings("unchecked")
     public @NonNull Maybe<T> or(final @NonNull Supplier<? extends Maybe<? extends T>> that) {
       return (Maybe<T>) that.get();
-    }
-
-    @Override
-    public <X extends Throwable> T getOrThrow(final @NonNull Supplier<X> supplier) throws X {
-      throw supplier.get();
     }
 
     @Override
@@ -387,12 +387,17 @@ public interface Maybe<T> extends Iterable<T> {
     }
 
     @Override
-    public T getOrElse(final @Nullable T other) {
+    public T getOrDefault(final @Nullable T defaultValue) {
       return this.value;
     }
 
     @Override
     public T getOrGet(final @NonNull Supplier<? extends T> other) {
+      return this.value;
+    }
+
+    @Override
+    public <X extends Throwable> T getOrThrow(final @NonNull Supplier<X> supplier) {
       return this.value;
     }
 
@@ -404,11 +409,6 @@ public interface Maybe<T> extends Iterable<T> {
     @Override
     public @NonNull Maybe<T> or(final @NonNull Supplier<? extends Maybe<? extends T>> that) {
       return this;
-    }
-
-    @Override
-    public <X extends Throwable> T getOrThrow(final @NonNull Supplier<X> supplier) {
-      return this.value;
     }
 
     @Override
