@@ -24,6 +24,7 @@
 package net.kyori.lambda.function;
 
 import net.kyori.lambda.exception.Exceptions;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.function.Function;
 
@@ -36,6 +37,38 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface ThrowingFunction<T, R, E extends Throwable> extends Function<T, R> {
+  /**
+   * Returns the same throwing function.
+   *
+   * @param function the function
+   * @param <T> the input type
+   * @param <R> the output type
+   * @param <E> the exception type
+   * @return the function
+   */
+  static <T, R, E extends Throwable> @NonNull ThrowingFunction<T, R, E> of(final @NonNull ThrowingFunction<T, R, E> function) {
+    return function;
+  }
+
+  /**
+   * Returns a function which will unwrap and rethrow any throwables caught in {@code function}.
+   *
+   * @param function the function
+   * @param <T> the input type
+   * @param <R> the output type
+   * @param <E> the exception type
+   * @return a function
+   */
+  static <T, R, E extends Throwable> @NonNull ThrowingFunction<T, R, E> unwrapping(final @NonNull ThrowingFunction<T, R, E> function) {
+    return input -> {
+      try {
+        return function.throwingApply(input);
+      } catch(final Throwable t) {
+        throw Exceptions.rethrow(Exceptions.unwrap(t));
+      }
+    };
+  }
+
   /**
    * Gets the result of applying this function to {@code input}.
    *

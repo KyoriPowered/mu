@@ -24,6 +24,7 @@
 package net.kyori.lambda.function;
 
 import net.kyori.lambda.exception.Exceptions;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.function.BiConsumer;
 
@@ -36,6 +37,38 @@ import java.util.function.BiConsumer;
  */
 @FunctionalInterface
 public interface ThrowingBiConsumer<T, U, E extends Throwable> extends BiConsumer<T, U> {
+  /**
+   * Returns the same throwing bi-consumer.
+   *
+   * @param consumer the bi-consumer
+   * @param <T> the first input type
+   * @param <U> the second input type
+   * @param <E> the exception type
+   * @return the bi-consumer
+   */
+  static <T, U, E extends Throwable> @NonNull ThrowingBiConsumer<T, U, E> of(final @NonNull ThrowingBiConsumer<T, U, E> consumer) {
+    return consumer;
+  }
+
+  /**
+   * Returns a consumer which will unwrap and rethrow any throwables caught in {@code consumer}.
+   *
+   * @param consumer the consumer
+   * @param <T> the first input type
+   * @param <U> the second input type
+   * @param <E> the exception type
+   * @return a consumer
+   */
+  static <T, U, E extends Throwable> @NonNull ThrowingBiConsumer<T, U, E> unwrapping(final @NonNull ThrowingBiConsumer<T, U, E> consumer) {
+    return (first, second) -> {
+      try {
+        consumer.throwingAccept(first, second);
+      } catch(final Throwable t) {
+        throw Exceptions.rethrow(Exceptions.unwrap(t));
+      }
+    };
+  }
+
   /**
    * Performs this operation on the given arguments.
    *

@@ -24,6 +24,7 @@
 package net.kyori.lambda.function;
 
 import net.kyori.lambda.exception.Exceptions;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.function.BiPredicate;
 
@@ -35,6 +36,38 @@ import java.util.function.BiPredicate;
  */
 @FunctionalInterface
 public interface ThrowingBiPredicate<T, U, E extends Throwable> extends BiPredicate<T, U> {
+  /**
+   * Returns the same throwing bi-predicate.
+   *
+   * @param predicate the predicate
+   * @param <T> the first input type
+   * @param <U> the second input type
+   * @param <E> the exception type
+   * @return the predicate
+   */
+  static <T, U, E extends Throwable> @NonNull ThrowingBiPredicate<T, U, E> of(final @NonNull ThrowingBiPredicate<T, U, E> predicate) {
+    return predicate;
+  }
+
+  /**
+   * Returns a bi-predicate which will unwrap and rethrow any throwables caught in {@code predicate}.
+   *
+   * @param predicate the predicate
+   * @param <T> the first input type
+   * @param <U> the second input type
+   * @param <E> the exception type
+   * @return a predicate
+   */
+  static <T, U, E extends Throwable> @NonNull ThrowingBiPredicate<T, U, E> unwrapping(final @NonNull ThrowingBiPredicate<T, U, E> predicate) {
+    return (first, second) -> {
+      try {
+        return predicate.throwingTest(first, second);
+      } catch(final Throwable t) {
+        throw Exceptions.rethrow(Exceptions.unwrap(t));
+      }
+    };
+  }
+
   /**
    * Evaluates this predicate on the given arguments.
    *

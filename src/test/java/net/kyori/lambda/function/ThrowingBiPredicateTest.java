@@ -21,46 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.lambda.exception;
+package net.kyori.lambda.function;
 
 import net.kyori.lambda.TestException;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.BiPredicate;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ExceptionsTest {
+class ThrowingBiPredicateTest {
   @Test
-  void testGetOrRethrow() {
-    assertEquals("kitten", Exceptions.getOrRethrow(() -> "kitten"));
-    assertThrows(TestException.class, () -> Exceptions.getOrRethrow(() -> { throw new TestException(); } ));
+  void testOf() {
+    assertThrows(TestException.class, () -> test(ThrowingBiPredicate.of((a, b) -> { throw new TestException(); })));
   }
 
   @Test
-  void testPropagate() {
-    final TestException te = new TestException();
-    try {
-      throw Exceptions.propagate(te);
-    } catch(final RuntimeException e) {
-      assertSame(te, e.getCause());
-    }
+  void testUnwrapping() {
+    assertThrows(TestException.class, () -> test(ThrowingBiPredicate.unwrapping((a, b) -> { throw new InvocationTargetException(new TestException()); })));
   }
 
-  @Test
-  void testThrowIfUnchecked() {
-    assertDoesNotThrow(() -> Exceptions.throwIfUnchecked(new Exception("should not be thrown")));
-    final RuntimeException re = new RuntimeException("should be thrown");
-    assertSame(re, assertThrows(RuntimeException.class, () -> Exceptions.throwIfUnchecked(re)));
-  }
-
-  @Test
-  void testUnwrap() {
-    final TestException te = new TestException();
-    final InvocationTargetException ite = new InvocationTargetException(te);
-    assertSame(te, Exceptions.unwrap(ite));
-  }
+  private static void test(final BiPredicate<String, String> supplier) { supplier.test("kitten", "kitty"); }
 }

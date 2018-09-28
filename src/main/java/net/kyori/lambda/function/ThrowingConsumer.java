@@ -24,6 +24,7 @@
 package net.kyori.lambda.function;
 
 import net.kyori.lambda.exception.Exceptions;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.function.Consumer;
 
@@ -35,6 +36,36 @@ import java.util.function.Consumer;
  */
 @FunctionalInterface
 public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
+  /**
+   * Returns the same throwing consumer.
+   *
+   * @param consumer the consumer
+   * @param <T> the input type
+   * @param <E> the exception type
+   * @return the consumer
+   */
+  static <T, E extends Throwable> @NonNull ThrowingConsumer<T, E> of(final @NonNull ThrowingConsumer<T, E> consumer) {
+    return consumer;
+  }
+
+  /**
+   * Returns a consumer which will unwrap and rethrow any throwables caught in {@code consumer}.
+   *
+   * @param consumer the consumer
+   * @param <T> the input type
+   * @param <E> the exception type
+   * @return a consumer
+   */
+  static <T, E extends Throwable> @NonNull ThrowingConsumer<T, E> unwrapping(final @NonNull ThrowingConsumer<T, E> consumer) {
+    return input -> {
+      try {
+        consumer.throwingAccept(input);
+      } catch(final Throwable t) {
+        throw Exceptions.rethrow(Exceptions.unwrap(t));
+      }
+    };
+  }
+
   /**
    * Performs this operation on the given argument.
    *

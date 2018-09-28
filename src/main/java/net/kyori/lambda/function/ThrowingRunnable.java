@@ -24,6 +24,7 @@
 package net.kyori.lambda.function;
 
 import net.kyori.lambda.exception.Exceptions;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A {@link Runnable} that allows for throwing checked exceptions.
@@ -32,6 +33,34 @@ import net.kyori.lambda.exception.Exceptions;
  */
 @FunctionalInterface
 public interface ThrowingRunnable<E extends Throwable> extends Runnable {
+  /**
+   * Returns the same throwing runnable.
+   *
+   * @param runnable the runnable
+   * @param <E> the exception type
+   * @return the runnable
+   */
+  static <E extends Throwable> @NonNull ThrowingRunnable<E> rethrowRunnable(final @NonNull ThrowingRunnable<E> runnable) {
+    return runnable;
+  }
+
+  /**
+   * Returns a runnable which will unwrap and rethrow any throwables caught in {@code runnable}.
+   *
+   * @param runnable the runnable
+   * @param <E> the exception type
+   * @return the runnable
+   */
+  static <E extends Throwable> @NonNull ThrowingRunnable<E> unwrapping(final @NonNull ThrowingRunnable<E> runnable) {
+    return () -> {
+      try {
+        runnable.throwingRun();
+      } catch(final Throwable t) {
+        throw Exceptions.rethrow(Exceptions.unwrap(t));
+      }
+    };
+  }
+
   /**
    * Run.
    *

@@ -24,6 +24,7 @@
 package net.kyori.lambda.function;
 
 import net.kyori.lambda.exception.Exceptions;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.function.BiFunction;
 
@@ -37,6 +38,40 @@ import java.util.function.BiFunction;
  */
 @FunctionalInterface
 public interface ThrowingBiFunction<T, U, R, E extends Throwable> extends BiFunction<T, U, R> {
+  /**
+   * Returns the same throwing bi-function.
+   *
+   * @param function the bi-function
+   * @param <T> the first input type
+   * @param <U> the second input type
+   * @param <R> the output type
+   * @param <E> the exception type
+   * @return the bi-function
+   */
+  static <T, U, R, E extends Throwable> @NonNull ThrowingBiFunction<T, U, R, E> of(final @NonNull ThrowingBiFunction<T, U, R, E> function) {
+    return function;
+  }
+
+  /**
+   * Returns a function which will unwrap and rethrow any throwables caught in {@code function}.
+   *
+   * @param function the function
+   * @param <T> the first input type
+   * @param <U> the second input type
+   * @param <R> the output type
+   * @param <E> the exception type
+   * @return a bi-function
+   */
+  static <T, U, R, E extends Throwable> @NonNull ThrowingBiFunction<T, U, R, E> unwrapping(final @NonNull ThrowingBiFunction<T, U, R, E> function) {
+    return (first, second) -> {
+      try {
+        return function.throwingApply(first, second);
+      } catch(final Throwable t) {
+        throw Exceptions.rethrow(Exceptions.unwrap(t));
+      }
+    };
+  }
+
   /**
    * Gets the result of applying this function to {@code input}.
    *

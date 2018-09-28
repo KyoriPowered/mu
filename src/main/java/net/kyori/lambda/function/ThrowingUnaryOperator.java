@@ -23,6 +23,9 @@
  */
 package net.kyori.lambda.function;
 
+import net.kyori.lambda.exception.Exceptions;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.function.UnaryOperator;
 
 /**
@@ -33,4 +36,33 @@ import java.util.function.UnaryOperator;
  */
 @FunctionalInterface
 public interface ThrowingUnaryOperator<T, E extends Throwable> extends ThrowingFunction<T, T, E>, UnaryOperator<T> {
+  /**
+   * Returns the same throwing unary operator.
+   *
+   * @param operator the unary operator
+   * @param <T> the input type
+   * @param <E> the exception type
+   * @return the unary operator
+   */
+  static <T, E extends Throwable> @NonNull ThrowingUnaryOperator<T, E> of(final @NonNull ThrowingUnaryOperator<T, E> operator) {
+    return operator;
+  }
+
+  /**
+   * Returns a unary operator which will unwrap and rethrow any throwables caught in {@code operator}.
+   *
+   * @param operator the unary operator
+   * @param <T> the input type
+   * @param <E> the exception type
+   * @return the unary operator
+   */
+  static <T, E extends Throwable> @NonNull ThrowingUnaryOperator<T, E> unwrapping(final @NonNull ThrowingUnaryOperator<T, E> operator) {
+    return input -> {
+      try {
+        return operator.throwingApply(input);
+      } catch(final Throwable t) {
+        throw Exceptions.rethrow(Exceptions.unwrap(t));
+      }
+    };
+  }
 }

@@ -23,6 +23,9 @@
  */
 package net.kyori.lambda.function;
 
+import net.kyori.lambda.exception.Exceptions;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.function.BinaryOperator;
 
 /**
@@ -33,4 +36,33 @@ import java.util.function.BinaryOperator;
  */
 @FunctionalInterface
 public interface ThrowingBinaryOperator<T, E extends Throwable> extends BinaryOperator<T>, ThrowingBiFunction<T, T, T, E> {
+  /**
+   * Returns the same throwing binary operator.
+   *
+   * @param operator the binary operator
+   * @param <T> the input type
+   * @param <E> the exception type
+   * @return the binary operator
+   */
+  static <T, E extends Throwable> @NonNull ThrowingBinaryOperator<T, E> of(final @NonNull ThrowingBinaryOperator<T, E> operator) {
+    return operator;
+  }
+
+  /**
+   * Returns a binary operator which will unwrap and rethrow any throwables caught in {@code operator}.
+   *
+   * @param operator the binary operator
+   * @param <T> the input type
+   * @param <E> the exception type
+   * @return the binary operator
+   */
+  static <T, E extends Throwable> @NonNull ThrowingBinaryOperator<T, E> unwrapping(final @NonNull ThrowingBinaryOperator<T, E> operator) {
+    return (first, second) -> {
+      try {
+        return operator.throwingApply(first, second);
+      } catch(final Throwable t) {
+        throw Exceptions.rethrow(Exceptions.unwrap(t));
+      }
+    };
+  }
 }
