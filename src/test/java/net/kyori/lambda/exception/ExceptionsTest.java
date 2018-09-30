@@ -27,19 +27,13 @@ import net.kyori.lambda.TestException;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ExceptionsTest {
-  @Test
-  void testGetOrRethrow() {
-    assertEquals("kitten", Exceptions.getOrRethrow(() -> "kitten"));
-    assertThrows(TestException.class, () -> Exceptions.getOrRethrow(() -> { throw new TestException(); } ));
-  }
-
   @Test
   void testPropagate() {
     final TestException te = new TestException();
@@ -60,7 +54,7 @@ class ExceptionsTest {
   @Test
   void testUnwrap() {
     final TestException te = new TestException();
-    final InvocationTargetException ite = new InvocationTargetException(te);
-    assertSame(te, Exceptions.unwrap(ite));
+    assertSame(te, Exceptions.unwrap(new ExecutionException(te)));
+    assertSame(te, Exceptions.unwrap(new InvocationTargetException(te)));
   }
 }

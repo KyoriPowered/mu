@@ -23,27 +23,15 @@
  */
 package net.kyori.lambda.exception;
 
-import net.kyori.lambda.function.ThrowingSupplier;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A collection of methods for working with exceptions.
  */
 public interface Exceptions {
-  /**
-   * Gets the result of {@code supplier}, or re-throws an exception, sneakily.
-   *
-   * @param supplier the supplier
-   * @param <T> the result type
-   * @param <E> the exception type
-   * @return the result
-   */
-  static <T, E extends Throwable> @NonNull T getOrRethrow(final @NonNull ThrowingSupplier<T, E> supplier) {
-    return supplier.get(); // get() rethrows for us
-  }
-
   /**
    * Re-throws an exception, sneakily.
    *
@@ -91,7 +79,7 @@ public interface Exceptions {
    * @return the unwrapped throwable, or the original throwable
    */
   static @NonNull Throwable unwrap(final @NonNull Throwable throwable) {
-    if(throwable instanceof InvocationTargetException) {
+    if(throwable instanceof ExecutionException || throwable instanceof InvocationTargetException) {
       final /* @Nullable */ Throwable cause = throwable.getCause();
       if(cause != null) {
         return cause;
