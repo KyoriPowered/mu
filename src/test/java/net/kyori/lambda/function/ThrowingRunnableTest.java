@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ThrowingRunnableTest {
   @Test
   void testOf() {
-    assertThrows(TestException.class, () -> run(ThrowingRunnable.rethrowRunnable(() -> { throw new TestException(); } )));
+    assertThrows(TestException.class, () -> run(ThrowingRunnable.of(() -> { throw new TestException(); } )));
   }
 
   @Test

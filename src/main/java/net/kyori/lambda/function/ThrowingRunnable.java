@@ -40,7 +40,7 @@ public interface ThrowingRunnable<E extends Throwable> extends Runnable {
    * @param <E> the exception type
    * @return the runnable
    */
-  static <E extends Throwable> @NonNull ThrowingRunnable<E> rethrowRunnable(final @NonNull ThrowingRunnable<E> runnable) {
+  static <E extends Throwable> @NonNull ThrowingRunnable<E> of(final @NonNull ThrowingRunnable<E> runnable) {
     return runnable;
   }
 
