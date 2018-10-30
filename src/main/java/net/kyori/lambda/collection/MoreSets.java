@@ -23,26 +23,31 @@
  */
 package net.kyori.lambda.collection;
 
-import org.junit.jupiter.api.Test;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-import static com.google.common.truth.Truth.assertThat;
+/*
+ * Name is prefixed with 'More' to avoid conflict with com.google.common.collect.Sets
+ */
 
-class MoreIterablesTest {
-  @Test
-  void testLFold() {
-    assertThat(MoreIterables.lfold(Arrays.asList(1, 2, 3, 4, 5), 0, (a, b) -> a + b)).isEqualTo(15);
-    assertThat(MoreIterables.lfold(Arrays.asList(1, 2, 3, 4, 5), 1, (a, b) -> a + b)).isEqualTo(16);
-  }
-
-  @Test
-  void testReduce() {
-    assertThat(
-      MoreIterables.reduce(
-        Arrays.asList("abc", "def", "ghi"),
-        strings -> String.join("-", strings)
-      )
-    ).isEqualTo("abc-def-ghi");
+/**
+ * A collection of utilities for working with sets.
+ */
+public interface MoreSets {
+  /**
+   * Creates a set.
+   *
+   * @param elements the elements
+   * @param <E> the element type
+   * @return the set
+   */
+  @SafeVarargs
+  static <E> @NonNull Set<E> of(final E... elements) {
+    final Set<E> set = new HashSet<>(elements.length);
+    Collections.addAll(set, elements);
+    return set;
   }
 }

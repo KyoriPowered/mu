@@ -25,24 +25,11 @@ package net.kyori.lambda.collection;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static com.google.common.truth.Truth.assertThat;
 
-class MoreIterablesTest {
+class MoreListsTest {
   @Test
-  void testLFold() {
-    assertThat(MoreIterables.lfold(Arrays.asList(1, 2, 3, 4, 5), 0, (a, b) -> a + b)).isEqualTo(15);
-    assertThat(MoreIterables.lfold(Arrays.asList(1, 2, 3, 4, 5), 1, (a, b) -> a + b)).isEqualTo(16);
-  }
-
-  @Test
-  void testReduce() {
-    assertThat(
-      MoreIterables.reduce(
-        Arrays.asList("abc", "def", "ghi"),
-        strings -> String.join("-", strings)
-      )
-    ).isEqualTo("abc-def-ghi");
+  void test() {
+    assertThat(MoreLists.of("def", "abc", "ghi")).containsExactly("def", "abc", "ghi").inOrder();
   }
 }

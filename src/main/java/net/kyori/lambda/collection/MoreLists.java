@@ -23,26 +23,31 @@
  */
 package net.kyori.lambda.collection;
 
-import org.junit.jupiter.api.Test;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import static com.google.common.truth.Truth.assertThat;
+/*
+ * Name is prefixed with 'More' to avoid conflict with com.google.common.collect.Lists
+ */
 
-class MoreIterablesTest {
-  @Test
-  void testLFold() {
-    assertThat(MoreIterables.lfold(Arrays.asList(1, 2, 3, 4, 5), 0, (a, b) -> a + b)).isEqualTo(15);
-    assertThat(MoreIterables.lfold(Arrays.asList(1, 2, 3, 4, 5), 1, (a, b) -> a + b)).isEqualTo(16);
-  }
-
-  @Test
-  void testReduce() {
-    assertThat(
-      MoreIterables.reduce(
-        Arrays.asList("abc", "def", "ghi"),
-        strings -> String.join("-", strings)
-      )
-    ).isEqualTo("abc-def-ghi");
+/**
+ * A collection of utilities for working with lists.
+ */
+public interface MoreLists {
+  /**
+   * Creates a list.
+   *
+   * @param elements the elements
+   * @param <E> the element type
+   * @return the list
+   */
+  @SafeVarargs
+  static <E> @NonNull List<E> of(final E... elements) {
+    final List<E> list = new ArrayList<>(elements.length);
+    Collections.addAll(list, elements);
+    return list;
   }
 }
