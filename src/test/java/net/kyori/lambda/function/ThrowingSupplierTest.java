@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Supplier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ThrowingSupplierTest {
@@ -40,6 +41,12 @@ class ThrowingSupplierTest {
   @Test
   void testUnwrapping() {
     assertThrows(TestException.class, () -> get(ThrowingSupplier.unwrapping(() -> { throw new InvocationTargetException(new TestException()); })));
+  }
+
+  @Test
+  void testGet() {
+    assertEquals("kitten", ThrowingSupplier.get(() -> "kitten"));
+    assertThrows(TestException.class, () -> ThrowingSupplier.get(() -> { throw new TestException(); } ));
   }
 
   private static void get(final Supplier<String> supplier) { supplier.get(); }

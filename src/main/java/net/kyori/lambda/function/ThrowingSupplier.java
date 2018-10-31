@@ -67,6 +67,18 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
   }
 
   /**
+   * Gets the result of {@code supplier}, or re-throws an exception, sneakily.
+   *
+   * @param supplier the supplier
+   * @param <T> the result type
+   * @param <E> the exception type
+   * @return the result
+   */
+  static <T, E extends Throwable> @NonNull T get(final @NonNull ThrowingSupplier<T, E> supplier) {
+    return supplier.get(); // get() rethrows for us
+  }
+
+  /**
    * Gets a result.
    *
    * @return a result
