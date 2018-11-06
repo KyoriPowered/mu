@@ -196,6 +196,21 @@ public interface Maybe<T> extends Iterable<T> {
   <U> @NonNull Maybe<U> flatMap(final @NonNull Function<? super T, ? extends Maybe<? extends U>> function);
 
   /**
+   * Provides {@code just} with the value if it is present.
+   *
+   * @param action the action
+   */
+  void with(final @NonNull Consumer<? super T> action);
+
+  /**
+   * Provides {@code action} with the value if it is present, otherwise runs {@code nothing}.
+   *
+   * @param action the action to run if something is present
+   * @param nothing the action to run if nothing is present
+   */
+  void withOrElse(final @NonNull Consumer<? super T> action, final @NonNull Runnable nothing);
+
+  /**
    * Returns a {@code Stream} containing the value if it is present, otherwise an empty {@code Stream}.
    *
    * @return a {@code Stream} containing the value if it is present, otherwise an empty {@code Stream}
@@ -324,6 +339,16 @@ public interface Maybe<T> extends Iterable<T> {
     }
 
     @Override
+    public void with(final @NonNull Consumer<? super T> action) {
+      // noop
+    }
+
+    @Override
+    public void withOrElse(final @NonNull Consumer<? super T> action, final @NonNull Runnable nothing) {
+      nothing.run();
+    }
+
+    @Override
     public void forEach(final @NonNull Consumer<? super T> action) {
       // noop
     }
@@ -425,6 +450,16 @@ public interface Maybe<T> extends Iterable<T> {
     @SuppressWarnings("unchecked")
     public <U> @NonNull Maybe<U> flatMap(final @NonNull Function<? super T, ? extends Maybe<? extends U>> function) {
       return (Maybe<U>) function.apply(this.value);
+    }
+
+    @Override
+    public void with(final @NonNull Consumer<? super T> action) {
+      action.accept(this.value);
+    }
+
+    @Override
+    public void withOrElse(final @NonNull Consumer<? super T> action, final @NonNull Runnable nothing) {
+      action.accept(this.value);
     }
 
     @Override

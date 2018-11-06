@@ -127,6 +127,28 @@ class MaybeTest {
   }
 
   @Test
+  void testWith() {
+    final AtomicInteger nothing = new AtomicInteger();
+    Maybe.nothing().with(v -> nothing.incrementAndGet());
+    assertEquals(0, nothing.get());
+    final AtomicInteger just = new AtomicInteger();
+    Maybe.just("foo").with(v -> just.incrementAndGet());
+    assertEquals(1, just.get());
+  }
+
+  @Test
+  void testWithOrElse() {
+    final AtomicInteger just = new AtomicInteger();
+    final AtomicInteger nothing = new AtomicInteger();
+    Maybe.nothing().withOrElse(v -> just.incrementAndGet(), nothing::incrementAndGet);
+    assertEquals(0, just.get());
+    assertEquals(1, nothing.get());
+    Maybe.just("foo").withOrElse(v -> just.incrementAndGet(), nothing::incrementAndGet);
+    assertEquals(1, just.get());
+    assertEquals(1, nothing.get());
+  }
+
+  @Test
   void testForEach() {
     final AtomicInteger nothing = new AtomicInteger();
     Maybe.nothing().forEach(v -> nothing.incrementAndGet());
