@@ -88,13 +88,17 @@ public interface StringReader extends StringRepresentable {
 
   /**
    * Marks the current index.
+   *
+   * @return the current index
    */
-  void mark();
+  int mark();
 
   /**
-   * Skips a single character.
+   * Resets the index to the {@link #mark() marked} position.
+   *
+   * @return the index before reset
    */
-  void reset();
+  int reset();
 
   /**
    * Peeks at the next character.

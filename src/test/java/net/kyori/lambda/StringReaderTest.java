@@ -82,12 +82,12 @@ class StringReaderTest {
   void testMarkAndReset() {
     final StringReader reader = StringReader.create("foo bar");
     assertEquals('f', reader.next());
-    reader.mark();
+    assertEquals(1, reader.mark());
     for(int i = 0; i < 5; i++) {
       reader.skip();
     }
     assertEquals('r', reader.next());
-    reader.reset();
+    assertEquals(7, reader.reset());
     assertEquals('o', reader.next());
     assertEquals('o', reader.next());
   }

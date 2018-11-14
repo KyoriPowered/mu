@@ -62,13 +62,17 @@ public class StringReaderImpl implements StringReader {
   }
 
   @Override
-  public void mark() {
-    this.marker = this.index;
+  public int mark() {
+    final int index = this.index;
+    this.marker = index;
+    return index;
   }
 
   @Override
-  public void reset() {
+  public int reset() {
+    final int index = this.index;
     this.index = this.marker;
+    return index;
   }
 
   @Override
