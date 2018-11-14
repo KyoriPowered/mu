@@ -23,41 +23,39 @@
  */
 package net.kyori.lambda.reflect;
 
-import org.junit.jupiter.api.Test;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Method;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-class AnnotationsTest {
-  @Test
-  void testFindClass() {
-    assertEquals("abc", Annotations.find(A.class, Foo.class).value());
-    assertEquals("abc", Annotations.find(B.class, Foo.class).value());
-    assertEquals("ghi", Annotations.find(C.class, Foo.class).value());
+/**
+ * A collection of utilities for working with methods.
+ */
+public interface Methods {
+  /**
+   * Gets a method.
+   *
+   * @param klass the class to look in
+   * @param method the method to search for
+   * @return the found method
+   */
+  static @Nullable Method get(final @NonNull Class<?> klass, final @NonNull Method method) {
+    return get(klass, method.getName(), method.getParameterTypes());
   }
 
-  @Test
-  void testFindMethod() throws NoSuchMethodException {
-    assertEquals("A.a", Annotations.find(A.class.getDeclaredMethod("a"), Foo.class).value());
-    assertEquals("B.a", Annotations.find(B.class.getDeclaredMethod("a"), Foo.class).value());
-    assertEquals("B.a", Annotations.find(C.class.getDeclaredMethod("a"), Foo.class).value());
+  /**
+   * Gets a method.
+   *
+   * @param klass the class to look in
+   * @param name the name of the method to search for
+   * @param parameterTypes the parameter types of the method to search for
+   * @return the found method
+   */
+  static @Nullable Method get(final @NonNull Class<?> klass, final @NonNull String name, final @Nullable Class<?>... parameterTypes) {
+    try {
+      return klass.getMethod(name, parameterTypes);
+    } catch(final NoSuchMethodException e) {
+      return null;
+    }
   }
-
-  @Foo("abc")
-  private static class A {
-    @Foo("A.a") public void a() {}
-  }
-
-  private static class B extends A {
-    @Foo("B.a") @Override public void a() {}
-  }
-
-  @Foo("ghi")
-  private static class C extends B {
-    @Override public void a() {}
-  }
-
-  @Retention(RetentionPolicy.RUNTIME) private @interface Foo { String value(); }
 }

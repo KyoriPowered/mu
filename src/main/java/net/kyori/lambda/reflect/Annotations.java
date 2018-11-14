@@ -23,30 +23,74 @@
  */
 package net.kyori.lambda.reflect;
 
-import net.kyori.lambda.Maybe;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.lang.annotation.Annotation;
-import java.util.function.Function;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 
 /**
  * A collection of utilities for working with annotations.
  */
 public interface Annotations {
   /**
-   * Gets a value from an annotation.
+   * Finds an annotation by searching the class hierarchy.
    *
-   * @param annotation the annotation
-   * @param function the function
+   * @param element the annotated element
+   * @param annotationType the annotation type
    * @param <A> the annotation type
-   * @param <V> the value type
-   * @return the value
+   * @return the annotation
    */
-  static <A extends Annotation, V> @NonNull Maybe<V> value(final @Nullable A annotation, final @NonNull Function<A, V> function) {
-    if(annotation != null) {
-      return Maybe.maybe(function.apply(annotation));
+  static <A extends Annotation> @Nullable A find(final @NonNull AnnotatedElement element, final @NonNull Class<A> annotationType) {
+    if(element instanceof Class<?>) {
+      return find((Class<?>) element, annotationType);
+    } else if(element instanceof Method) {
+      return find((Method) element, annotationType);
+    } else {
+      final /* @Nullable */ A annotation = element.getDeclaredAnnotation(annotationType);
+      if(annotation != null) {
+        return annotation;
+      }
     }
-    return Maybe.nothing();
+    return null;
+  }
+
+  /**
+   * Finds an annotation by searching the hierarchy of {@code klass}.
+   *
+   * @param klass the klass
+   * @param annotationType the annotation type
+   * @param <A> the annotation type
+   * @return the annotation
+   */
+  static <A extends Annotation> @Nullable A find(final @NonNull Class<?> klass, final @NonNull Class<A> annotationType) {
+    final /* @Nullable */ A annotation = klass.getDeclaredAnnotation(annotationType);
+    if(annotation != null) {
+      return annotation;
+    }
+    return Types.find(klass, type -> type.getDeclaredAnnotation(annotationType));
+  }
+
+  /**
+   * Finds an annotation by searching the class hierarchy of {@code method}.
+   *
+   * @param method the method
+   * @param annotationType the annotation type
+   * @param <A> the annotation type
+   * @return the annotation
+   */
+  static <A extends Annotation> @Nullable A find(final @NonNull Method method, final @NonNull Class<A> annotationType) {
+    final /* @Nullable */ A annotation = method.getDeclaredAnnotation(annotationType);
+    if(annotation != null) {
+      return annotation;
+    }
+    return Types.find(method.getDeclaringClass(), type -> {
+      final Method target = Methods.get(type, method);
+      if(target == null) {
+        return null;
+      }
+      return target.getDeclaredAnnotation(annotationType);
+    });
   }
 }
