@@ -39,7 +39,8 @@ public interface Types {
    *
    * @param first the first class, used to start the search
    * @param function the function to find a result
-   * @param <T> the type
+   * @param <T> the class type
+   * @param <R> the result type
    * @return the result of applying {@code function} to a class
    */
   // thanks, kenzie
