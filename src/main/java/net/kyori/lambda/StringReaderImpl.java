@@ -96,7 +96,7 @@ public class StringReaderImpl implements StringReader {
 
   @Override
   public @NonNull String peek(final @NonNull IntPredicate predicate) {
-    final int start = this.index;
+    final int start = this.mark();
     while(this.readable() && predicate.test(this.peek())) {
       this.skip();
     }
