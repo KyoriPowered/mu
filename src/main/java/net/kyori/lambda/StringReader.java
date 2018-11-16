@@ -23,6 +23,7 @@
  */
 package net.kyori.lambda;
 
+import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.function.IntPredicate;
@@ -55,14 +56,14 @@ public interface StringReader extends StringRepresentable {
    *
    * @return length
    */
-  int length();
+  @NonNegative int length();
 
   /**
    * Gets the current index.
    *
    * @return the current index
    */
-  int index();
+  @NonNegative int index();
 
   /**
    * Checks if a single character can be read.
@@ -79,7 +80,7 @@ public interface StringReader extends StringRepresentable {
    * @param length the number of characters
    * @return if {@code length} characters can be read
    */
-  boolean readable(final int length);
+  boolean readable(final @NonNegative int length);
 
   /**
    * Skips a single character.
@@ -87,18 +88,29 @@ public interface StringReader extends StringRepresentable {
   void skip();
 
   /**
+   * Skips characters while {@code predicate} is satisfied.
+   *
+   * @param predicate the predicate
+   */
+  default void skip(final @NonNull IntPredicate predicate) {
+    while(this.readable() && predicate.test(this.peek())) {
+      this.skip();
+    }
+  }
+
+  /**
    * Marks the current index.
    *
    * @return the current index
    */
-  int mark();
+  @NonNegative int mark();
 
   /**
    * Resets the index to the {@link #mark() marked} position.
    *
    * @return the index before reset
    */
-  int reset();
+  @NonNegative int reset();
 
   /**
    * Peeks at the next character.
@@ -123,7 +135,7 @@ public interface StringReader extends StringRepresentable {
    * @param predicate the character predicate
    * @return a string
    */
-  @NonNull String peekWhile(final IntPredicate predicate);
+  @NonNull String peek(final @NonNull IntPredicate predicate);
 
   /**
    * Gets the next character.
@@ -139,5 +151,5 @@ public interface StringReader extends StringRepresentable {
    * @param predicate the character predicate
    * @return a string
    */
-  @NonNull String nextWhile(final IntPredicate predicate);
+  @NonNull String next(final @NonNull IntPredicate predicate);
 }

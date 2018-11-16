@@ -109,7 +109,7 @@ class StringReaderTest {
   @Test
   void testPeekWhile() {
     final StringReader reader = StringReader.create("foo bar");
-    assertEquals("foo", reader.peekWhile(character -> !Character.isWhitespace(character)));
+    assertEquals("foo", reader.peek(character -> !Character.isWhitespace(character)));
     assertEquals('f', reader.peek()); // we peeked above, we should be at the beginning
   }
 
@@ -134,7 +134,7 @@ class StringReaderTest {
   @Test
   void testNextWhile() {
     final StringReader reader = StringReader.create("foo bar");
-    assertEquals("foo", reader.nextWhile(character -> !Character.isWhitespace(character)));
+    assertEquals("foo", reader.next(character -> !Character.isWhitespace(character)));
     assertEquals(' ', reader.next());
     assertEquals('b', reader.next());
     reader.next(); reader.next();

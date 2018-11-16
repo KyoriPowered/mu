@@ -23,6 +23,7 @@
  */
 package net.kyori.lambda;
 
+import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.function.IntPredicate;
@@ -42,17 +43,17 @@ public class StringReaderImpl implements StringReader {
   }
 
   @Override
-  public int length() {
+  public @NonNegative int length() {
     return this.string.length();
   }
 
   @Override
-  public int index() {
+  public @NonNegative int index() {
     return this.index;
   }
 
   @Override
-  public boolean readable(final int length) {
+  public boolean readable(final @NonNegative int length) {
     return this.index + length <= this.string.length();
   }
 
@@ -62,14 +63,14 @@ public class StringReaderImpl implements StringReader {
   }
 
   @Override
-  public int mark() {
+  public @NonNegative int mark() {
     final int index = this.index;
     this.marker = index;
     return index;
   }
 
   @Override
-  public int reset() {
+  public @NonNegative int reset() {
     final int index = this.index;
     this.index = this.marker;
     return index;
@@ -88,13 +89,13 @@ public class StringReaderImpl implements StringReader {
   }
 
   @Override
-  public @NonNull String peekWhile(final IntPredicate predicate) {
+  public @NonNull String peek(final @NonNull IntPredicate predicate) {
     final int start = this.index;
-    int end = 0;
-    while(this.readable(end) && predicate.test(this.peek(end))) {
-      end++;
+    while(this.readable() && predicate.test(this.peek())) {
+      this.skip();
     }
-    return this.string.substring(start, start + end);
+    final int end = this.reset();
+    return this.string.substring(start, end);
   }
 
   @Override
@@ -104,7 +105,7 @@ public class StringReaderImpl implements StringReader {
   }
 
   @Override
-  public @NonNull String nextWhile(final IntPredicate predicate) {
+  public @NonNull String next(final @NonNull IntPredicate predicate) {
     final int start = this.index;
     while(this.readable() && predicate.test(this.peek())) {
       this.skip();
@@ -118,7 +119,7 @@ public class StringReaderImpl implements StringReader {
     }
   }
 
-  protected void assertOffsetReadable(final int offset) {
+  protected void assertOffsetReadable(final @NonNegative int offset) {
     if(!this.readable(offset)) {
       throw new StringIndexOutOfBoundsException(this.index + offset);
     }
