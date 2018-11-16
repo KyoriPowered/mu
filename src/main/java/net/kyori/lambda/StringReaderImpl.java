@@ -33,6 +33,12 @@ public class StringReaderImpl implements StringReader {
   protected int index;
   protected int marker;
 
+  @SuppressWarnings("CopyConstructorMissesField")
+  private StringReaderImpl(final @NonNull StringReaderImpl reader) {
+    this.string = reader.string;
+    this.index = reader.index;
+  }
+
   public StringReaderImpl(final @NonNull String string) {
     this.string = string;
   }
@@ -111,6 +117,11 @@ public class StringReaderImpl implements StringReader {
       this.skip();
     }
     return this.string.substring(start, this.index);
+  }
+
+  @Override
+  public @NonNull StringReader copy() {
+    return new StringReaderImpl(this);
   }
 
   protected void assertReadable() {

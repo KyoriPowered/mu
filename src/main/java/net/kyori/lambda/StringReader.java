@@ -152,4 +152,11 @@ public interface StringReader extends StringRepresentable {
    * @return a string
    */
   @NonNull String next(final @NonNull IntPredicate predicate);
+
+  /**
+   * Creates a copy.
+   *
+   * @return a copy
+   */
+  @NonNull StringReader copy();
 }
