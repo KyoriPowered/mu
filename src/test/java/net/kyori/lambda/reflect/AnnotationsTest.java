@@ -23,40 +23,76 @@
  */
 package net.kyori.lambda.reflect;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.AnnotatedElement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class AnnotationsTest {
   @Test
+  void testFind() throws NoSuchMethodException {
+    assertAnnotationValue("class=a", Annotations.find((AnnotatedElement) A.class, Foo.class));
+    assertAnnotationValue("class=b", Annotations.find((AnnotatedElement) B.class, Foo.class));
+    assertAnnotationValue("class=b,method=a", Annotations.find((AnnotatedElement) B.class.getDeclaredMethod("a"), Foo.class));
+  }
+
+  @Test
   void testFindClass() {
-    assertEquals("abc", Annotations.find(A.class, Foo.class).value());
-    assertEquals("abc", Annotations.find(B.class, Foo.class).value());
-    assertEquals("ghi", Annotations.find(C.class, Foo.class).value());
+    assertAnnotationValue("class=b", Annotations.find(B.class, Foo.class));
+    assertAnnotationValue("class=b", Annotations.find(C.class, Foo.class));
+    assertAnnotationValue("class=d", Annotations.find(D.class, Foo.class));
+  }
+
+  @Test
+  void testFindField() throws NoSuchFieldException {
+    assertNull(Annotations.find(B.class.getDeclaredField("y"), Foo.class));
+    assertAnnotationValue("class=b,field=z", Annotations.find(B.class.getDeclaredField("z"), Foo.class));
   }
 
   @Test
   void testFindMethod() throws NoSuchMethodException {
-    assertEquals("A.a", Annotations.find(A.class.getDeclaredMethod("a"), Foo.class).value());
-    assertEquals("B.a", Annotations.find(B.class.getDeclaredMethod("a"), Foo.class).value());
-    assertEquals("B.a", Annotations.find(C.class.getDeclaredMethod("a"), Foo.class).value());
+    assertAnnotationValue("class=b,method=a", Annotations.find(B.class.getDeclaredMethod("a"), Foo.class));
+    assertAnnotationValue("class=c,method=a", Annotations.find(C.class.getDeclaredMethod("a"), Foo.class));
+    assertAnnotationValue("class=c,method=a", Annotations.find(D.class.getDeclaredMethod("a"), Foo.class));
+    assertNull(Annotations.find(D.class.getDeclaredMethod("b"), Foo.class));
   }
 
-  @Foo("abc")
-  private static class A {
-    @Foo("A.a") public void a() {}
+  private static void assertAnnotationValue(final String string, final @Nullable Foo annotation) {
+    if(annotation == null) {
+      fail("could not find annotation");
+    } else {
+      assertEquals(string, annotation.value());
+    }
   }
 
-  private static class B extends A {
-    @Foo("B.a") @Override public void a() {}
+  @Foo("class=a")
+  public interface A {
+    @Foo("class=a,method=a") void a();
   }
 
-  @Foo("ghi")
+  @Foo("class=b")
+  private static class B implements A {
+    private String y;
+    private @Foo("class=b,field=z") String z;
+
+    @Override
+    @Foo("class=b,method=a") public void a() {}
+  }
+
   private static class C extends B {
+    @Foo("class=c,method=a") @Override public void a() {}
+  }
+
+  @Foo("class=d")
+  private static class D extends C {
     @Override public void a() {}
+    public void b() {}
   }
 
   @Retention(RetentionPolicy.RUNTIME) private @interface Foo { String value(); }
