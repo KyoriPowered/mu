@@ -45,6 +45,7 @@ public interface MoreLists {
    * @return the list
    */
   @SafeVarargs
+  @SuppressWarnings("varargs")
   static <E> @NonNull List<E> of(final E... elements) {
     final List<E> list = new ArrayList<>(elements.length);
     Collections.addAll(list, elements);

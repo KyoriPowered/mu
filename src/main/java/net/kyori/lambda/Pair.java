@@ -23,12 +23,15 @@
  */
 package net.kyori.lambda;
 
+import net.kyori.lambda.examine.Examinable;
+import net.kyori.lambda.examine.ExaminableProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * A pair.
@@ -36,7 +39,7 @@ import java.util.function.Function;
  * @param <L> the left type
  * @param <R> the right type
  */
-public class Pair<L, R> {
+public class Pair<L, R> implements Examinable {
   private final L left;
   private final R right;
 
@@ -158,6 +161,14 @@ public class Pair<L, R> {
    */
   public <NR> @NonNull Pair<L, NR> rmap(final @NonNull Function<? super R, ? extends NR> function) {
     return new Pair<>(this.left, function.apply(this.right));
+  }
+
+  @Override
+  public @NonNull Stream<? extends ExaminableProperty> examinableProperties() {
+    return Stream.of(
+      ExaminableProperty.of("left", this.left),
+      ExaminableProperty.of("right", this.right)
+    );
   }
 
   @Override

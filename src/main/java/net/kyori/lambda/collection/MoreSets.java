@@ -45,6 +45,7 @@ public interface MoreSets {
    * @return the set
    */
   @SafeVarargs
+  @SuppressWarnings("varargs")
   static <E> @NonNull Set<E> of(final E... elements) {
     final Set<E> set = new HashSet<>(elements.length);
     Collections.addAll(set, elements);

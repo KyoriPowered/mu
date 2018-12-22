@@ -23,5 +23,6 @@
  */
 package net.kyori.lambda;
 
+@SuppressWarnings("serial")
 public class TestException extends Exception {
 }

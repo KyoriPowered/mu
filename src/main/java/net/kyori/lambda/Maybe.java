@@ -236,6 +236,19 @@ public interface Maybe<T> extends Iterable<T> {
   }
 
   /**
+   * Gets a maybe with just {@code object} if {@code object} is an instance of {@code type}, or a maybe with nothing.
+   *
+   * @param object the object
+   * @param type the type
+   * @param <T> the type
+   * @return the maybe
+   */
+  @SuppressWarnings("unchecked")
+  static <T> @NonNull Maybe<T> cast(final @Nullable Object object, final @NonNull Class<T> type) {
+    return type.isInstance(object) ? just((T) object) : nothing();
+  }
+
+  /**
    * Returns the first {@link #isPopulated() populated} {@code Maybe}, or an empty {@code Maybe}.
    *
    * @param maybes the possible options

@@ -87,4 +87,16 @@ public final class MorePredicates {
   public static <T> @NonNull Predicate<T> nonNull() {
     return (Predicate<T>) NON_NULL;
   }
+
+  /**
+   * Creates a predicate that checks if the input is an instance of {@code type}.
+   *
+   * @param type the type
+   * @param <T> the returned predicate type
+   * @param <U> the type to check instance of
+   * @return a predicate
+   */
+  public static <T, U> @NonNull Predicate<T> isInstance(final @NonNull Class<U> type) {
+    return type::isInstance;
+  }
 }

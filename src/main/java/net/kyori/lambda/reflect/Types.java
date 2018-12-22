@@ -44,6 +44,7 @@ public interface Types {
    * @return the result of applying {@code function} to a class
    */
   // thanks, kenzie
+  @SuppressWarnings("unchecked")
   static <T, R> @Nullable R find(final @NonNull Class<T> first, final @NonNull Function<Class<? super T>, R> function) {
     final Deque<Class<? super T>> classes = new ArrayDeque<>();
     classes.add(first);

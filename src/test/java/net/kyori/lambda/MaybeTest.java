@@ -185,6 +185,12 @@ class MaybeTest {
   }
 
   @Test
+  void testCast() {
+    assertEquals(Maybe.just("potato"), Maybe.cast("potato", String.class));
+    assertEquals(Maybe.nothing(), Maybe.cast("potato", Integer.class));
+  }
+
+  @Test
   void testFirst() {
     assertEquals(Maybe.nothing(), Maybe.first(Maybe.nothing(), Maybe.nothing()));
     assertEquals(Maybe.just("foo"), Maybe.first(Maybe.just("foo"), Maybe.just("bar")));
@@ -192,5 +198,6 @@ class MaybeTest {
     assertEquals(Maybe.just("foo"), Maybe.first(Arrays.asList(Maybe.just("foo"), Maybe.just("bar"))));
   }
 
+  @SuppressWarnings("serial")
   private static class Expected extends RuntimeException {}
 }
