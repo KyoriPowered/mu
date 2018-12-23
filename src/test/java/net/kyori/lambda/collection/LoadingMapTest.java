@@ -21,42 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.lambda.function;
+package net.kyori.lambda.collection;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MorePredicatesTest {
+class LoadingMapTest {
   @Test
-  void testAlwaysFalse() {
-    assertFalse(MorePredicates.alwaysFalse().test(null));
-    assertFalse(MorePredicates.alwaysFalse().test("foo"));
-  }
-
-  @Test
-  void testAlwaysTrue() {
-    assertTrue(MorePredicates.alwaysTrue().test(null));
-    assertTrue(MorePredicates.alwaysTrue().test("foo"));
-  }
-
-  @Test
-  void testIsNull() {
-    assertTrue(MorePredicates.isNull().test(null));
-    assertFalse(MorePredicates.isNull().test("foo"));
-  }
-
-  @Test
-  void testNonNull() {
-    assertFalse(MorePredicates.nonNull().test(null));
-    assertTrue(MorePredicates.nonNull().test("foo"));
-  }
-
-  @Test
-  void testInstanceOf() {
-    assertTrue(MorePredicates.instanceOf(String.class).test("foo"));
-    assertFalse(MorePredicates.instanceOf(String.class).test(1));
-    assertTrue(MorePredicates.instanceOf(Integer.class).test(1));
+  void testConcurrent() {
+    final LoadingMap<String, String> map = LoadingMap.concurrent(key -> "auto");
+    assertEquals("auto", map.get("foo"));
+    map.put("foo", "bar");
+    assertEquals("bar", map.get("foo"));
   }
 }

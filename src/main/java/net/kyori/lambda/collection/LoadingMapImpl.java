@@ -21,42 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.lambda.function;
+package net.kyori.lambda.collection;
 
-import org.junit.jupiter.api.Test;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.Map;
+import java.util.function.Function;
 
-class MorePredicatesTest {
-  @Test
-  void testAlwaysFalse() {
-    assertFalse(MorePredicates.alwaysFalse().test(null));
-    assertFalse(MorePredicates.alwaysFalse().test("foo"));
+/* package */ final class LoadingMapImpl<K, V> implements ForwardingMap<K, V>, LoadingMap<K, V> {
+  private final Map<K, V> map;
+  private final Function<K, V> function;
+
+  /* package */ LoadingMapImpl(final Map<K, V> map, final Function<K, V> function) {
+    this.map = map;
+    this.function = function;
   }
 
-  @Test
-  void testAlwaysTrue() {
-    assertTrue(MorePredicates.alwaysTrue().test(null));
-    assertTrue(MorePredicates.alwaysTrue().test("foo"));
+  @Override
+  public @NonNull Map<K, V> map() {
+    return this.map;
   }
 
-  @Test
-  void testIsNull() {
-    assertTrue(MorePredicates.isNull().test(null));
-    assertFalse(MorePredicates.isNull().test("foo"));
-  }
-
-  @Test
-  void testNonNull() {
-    assertFalse(MorePredicates.nonNull().test(null));
-    assertTrue(MorePredicates.nonNull().test("foo"));
-  }
-
-  @Test
-  void testInstanceOf() {
-    assertTrue(MorePredicates.instanceOf(String.class).test("foo"));
-    assertFalse(MorePredicates.instanceOf(String.class).test(1));
-    assertTrue(MorePredicates.instanceOf(Integer.class).test(1));
+  @Override
+  @SuppressWarnings("unchecked")
+  public V get(final Object key) {
+    final V value = this.map.get(key);
+    if(value != null) {
+      return value;
+    }
+    return this.map.computeIfAbsent((K) key, this.function);
   }
 }

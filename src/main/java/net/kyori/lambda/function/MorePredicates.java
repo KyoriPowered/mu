@@ -96,7 +96,7 @@ public final class MorePredicates {
    * @param <U> the type to check instance of
    * @return a predicate
    */
-  public static <T, U> @NonNull Predicate<T> isInstance(final @NonNull Class<U> type) {
+  public static <T, U> @NonNull Predicate<T> instanceOf(final @NonNull Class<U> type) {
     return type::isInstance;
   }
 }

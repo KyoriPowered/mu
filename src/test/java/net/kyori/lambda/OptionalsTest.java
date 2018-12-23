@@ -72,6 +72,15 @@ class OptionalsTest {
     assertFalse(Optionals.isInstance(Optional.of(new C()), A.class));
   }
 
+  @Test
+  void testOr() {
+    final Optional<String> empty = Optional.empty();
+    final Optional<String> wanted = Optional.of("meow");
+    final Optional<String> unwanted = Optional.of("hiss");
+    assertEquals(wanted, Optionals.or(empty, () -> wanted));
+    assertEquals(wanted, Optionals.or(wanted, () -> unwanted));
+  }
+
   private interface A {}
   private static class B implements A {}
   private static class C {}
