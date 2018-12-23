@@ -25,8 +25,11 @@ package net.kyori.lambda.collection;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /*
  * Name is prefixed with 'More' to avoid conflict with com.google.common.collect.Iterables
@@ -64,5 +67,19 @@ public interface MoreIterables {
    */
   static <E> /* @Nullable */ E reduce(final /* @Nullable */ Iterable<? extends E> iterable, final @NonNull Function<Iterable<? extends E>, ? extends E> function) {
     return function.apply(iterable);
+  }
+
+  /**
+   * Creates a stream.
+   *
+   * @param iterable the iterable
+   * @param <E> the element type
+   * @return a stream
+   */
+  static <E> @NonNull Stream<E> stream(final @NonNull Iterable<E> iterable) {
+    if(iterable instanceof Collection<?>) {
+      return ((Collection<E>) iterable).stream();
+    }
+    return StreamSupport.stream(iterable.spliterator(), false);
   }
 }

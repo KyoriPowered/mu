@@ -26,8 +26,10 @@ package net.kyori.lambda.collection;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 
 class MoreIterablesTest {
   @Test
@@ -44,5 +46,12 @@ class MoreIterablesTest {
         strings -> String.join("-", strings)
       )
     ).isEqualTo("abc-def-ghi");
+  }
+
+  @Test
+  void testStream() {
+    final Iterable<String> iterable = Arrays.asList("abc", "def");
+    final Stream<String> stream = MoreIterables.stream(iterable);
+    assertThat(stream).containsExactly("abc", "def").inOrder();
   }
 }

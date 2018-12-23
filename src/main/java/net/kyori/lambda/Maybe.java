@@ -24,6 +24,8 @@
 package net.kyori.lambda;
 
 import net.kyori.lambda.collection.MoreIterators;
+import net.kyori.lambda.examine.Examinable;
+import net.kyori.lambda.examine.ExaminableProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -47,7 +49,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @param <T> the value type
  */
-public interface Maybe<T> extends Iterable<T> {
+public interface Maybe<T> extends Examinable, Iterable<T> {
   /**
    * A collector that accumulates zero or one elements into a {@code Maybe}.
    *
@@ -382,6 +384,11 @@ public interface Maybe<T> extends Iterable<T> {
     }
 
     @Override
+    public @NonNull Stream<? extends ExaminableProperty> examinableProperties() {
+      return Stream.empty();
+    }
+
+    @Override
     public @NonNull String toString() {
       return "Maybe.nothing()";
     }
@@ -493,6 +500,11 @@ public interface Maybe<T> extends Iterable<T> {
     @Override
     public @NonNull Iterator<T> iterator() {
       return MoreIterators.singleton(this.value);
+    }
+
+    @Override
+    public @NonNull Stream<? extends ExaminableProperty> examinableProperties() {
+      return Stream.of(ExaminableProperty.of("value", this.value));
     }
 
     @Override
