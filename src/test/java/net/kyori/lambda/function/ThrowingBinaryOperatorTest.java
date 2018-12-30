@@ -26,6 +26,7 @@ package net.kyori.lambda.function;
 import net.kyori.lambda.TestException;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.BinaryOperator;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -38,7 +39,7 @@ class ThrowingBinaryOperatorTest {
 
   @Test
   void testUnwrapping() {
-    assertThrows(TestException.class, () -> apply(ThrowingBinaryOperator.unwrapping((a, b) -> { throw new TestException(); })));
+    assertThrows(TestException.class, () -> apply(ThrowingBinaryOperator.unwrapping((a, b) -> { throw new InvocationTargetException(new TestException()); })));
   }
 
   private static void apply(final BinaryOperator<String> operator) { operator.apply("kitten", "kitty"); }

@@ -102,11 +102,13 @@ class PairTest {
   void testEquals() {
     assertThat(Pair.of("left", "right")).isEqualTo(Pair.of("left", "right"));
     assertThat(Pair.of("tfel", "right")).isNotEqualTo(Pair.of("left", "right"));
+    assertThat(Pair.of("left", "thgir")).isNotEqualTo(Pair.of("left", "right"));
   }
 
   @Test
   void testHashCode() {
     assertThat(Pair.of("left", "right").hashCode()).isEqualTo(Pair.of("left", "right").hashCode());
     assertThat(Pair.of("tfel", "right").hashCode()).isNotEqualTo(Pair.of("left", "right").hashCode());
+    assertThat(Pair.of("left", "thgir").hashCode()).isNotEqualTo(Pair.of("left", "right").hashCode());
   }
 }

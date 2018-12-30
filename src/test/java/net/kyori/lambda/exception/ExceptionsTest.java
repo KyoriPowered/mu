@@ -23,6 +23,8 @@
  */
 package net.kyori.lambda.exception;
 
+import com.google.common.truth.ThrowableSubject;
+import com.google.common.truth.Truth;
 import net.kyori.lambda.TestException;
 import org.junit.jupiter.api.Test;
 
@@ -55,6 +57,9 @@ class ExceptionsTest {
   void testUnwrap() {
     final TestException te = new TestException();
     assertSame(te, Exceptions.unwrap(new ExecutionException(te)));
+    final ThrowableSubject ts = Truth.assertThat(Exceptions.unwrap(new IllegalArgumentException(te)));
+    ts.isInstanceOf(IllegalArgumentException.class);
+    ts.hasCauseThat().isSameAs(te);
     assertSame(te, Exceptions.unwrap(new InvocationTargetException(te)));
   }
 }
