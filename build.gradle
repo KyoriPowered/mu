@@ -6,10 +6,10 @@ plugins {
 }
 
 group 'net.kyori'
-version '1.0.0-SNAPSHOT'
+version '2.0.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.9
+targetCompatibility = 1.9
 
 tasks.withType(JavaCompile) {
   options.compilerArgs += ['-Xlint:all', '-Xlint:-path', '-parameters']
