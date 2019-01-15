@@ -23,37 +23,18 @@
  */
 package net.kyori.lambda.reflect;
 
-import net.kyori.lambda.Composer;
-import net.kyori.lambda.collection.LoadingMap;
 import net.kyori.lambda.exception.Exceptions;
-import net.kyori.lambda.function.ThrowingSupplier;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * A collection of utilities for working with method handles.
  */
 public final class MoreMethodHandles {
-  private static final Constructor<MethodHandles.Lookup> LOOKUP_CONSTRUCTOR = Composer.get(ThrowingSupplier.of(() -> {
-    final Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
-    constructor.setAccessible(true);
-    return constructor;
-  }));
-  private static final Map<Class<?>, MethodHandles.Lookup> LOOKUPS = LoadingMap.concurrent(requestedLookupClass -> {
-    try {
-      return LOOKUP_CONSTRUCTOR.newInstance(requestedLookupClass, MethodHandles.Lookup.PUBLIC | MethodHandles.Lookup.PRIVATE | MethodHandles.Lookup.PROTECTED | MethodHandles.Lookup.PACKAGE);
-    } catch(final InstantiationException | IllegalAccessException | InvocationTargetException e) {
-      throw Exceptions.rethrow(e);
-    }
-  });
-
   private MoreMethodHandles() {
   }
 
@@ -65,7 +46,11 @@ public final class MoreMethodHandles {
    * @return a lookup object for the target class, with private access
    */
   public static MethodHandles.@NonNull Lookup privateLookupIn(final @NonNull Class<?> targetClass) {
-    return LOOKUPS.get(targetClass);
+    try {
+      return MethodHandles.privateLookupIn(targetClass, MethodHandles.lookup());
+    } catch(final IllegalAccessException e) {
+      throw Exceptions.rethrow(e);
+    }
   }
 
   /**
