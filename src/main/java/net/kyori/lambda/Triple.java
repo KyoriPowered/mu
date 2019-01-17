@@ -198,6 +198,7 @@ public class Triple<L, M, R> implements Examinable {
   public @NonNull Stream<? extends ExaminableProperty> examinableProperties() {
     return Stream.of(
       ExaminableProperty.of("left", this.left),
+      ExaminableProperty.of("middle", this.middle),
       ExaminableProperty.of("right", this.right)
     );
   }
