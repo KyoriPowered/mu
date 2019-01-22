@@ -39,7 +39,7 @@ class TripleTest {
 
   @Test
   void testOfMiddle() {
-    final Triple<?, ?, String> triple = Triple.middle("middle");
+    final Triple<?, String, ?> triple = Triple.middle("middle");
     assertThat(triple.left()).isNull();
     assertThat(triple.middle()).isEqualTo("middle");
     assertThat(triple.right()).isNull();
