@@ -58,7 +58,7 @@ final class ScheduledExecutorServiceSchedulerImpl implements Scheduler {
   }
 
   @Override
-  public @NonNull <T> FutureTask<T> immediate(final @NonNull Supplier<T> supplier) {
+  public <T> @NonNull FutureTask<T> immediate(final @NonNull Supplier<T> supplier) {
     return this.schedule(supplier, null);
   }
 
@@ -68,7 +68,7 @@ final class ScheduledExecutorServiceSchedulerImpl implements Scheduler {
   }
 
   @Override
-  public @NonNull <T> FutureTask<T> delayed(final @NonNull Supplier<T> supplier, final @NonNull Duration delay) {
+  public <T> @NonNull FutureTask<T> delayed(final @NonNull Supplier<T> supplier, final @NonNull Duration delay) {
     return this.schedule(supplier, delay);
   }
 

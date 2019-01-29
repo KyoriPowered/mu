@@ -61,7 +61,7 @@ public interface Scheduler {
    * @param <T> the type
    * @return the task
    */
-  @NonNull <T> FutureTask<T> immediate(final @NonNull Supplier<T> supplier);
+  <T> @NonNull FutureTask<T> immediate(final @NonNull Supplier<T> supplier);
 
   /**
    * Schedules a delayed task.
@@ -80,7 +80,7 @@ public interface Scheduler {
    * @param <T> the type
    * @return the task
    */
-  @NonNull <T> FutureTask<T> delayed(final @NonNull Supplier<T> supplier, final @NonNull Duration delay);
+  <T> @NonNull FutureTask<T> delayed(final @NonNull Supplier<T> supplier, final @NonNull Duration delay);
 
   /**
    * Schedules a repeating task with no delay.
