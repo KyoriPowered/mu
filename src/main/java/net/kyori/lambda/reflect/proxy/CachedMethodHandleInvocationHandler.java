@@ -23,36 +23,38 @@
  */
 package net.kyori.lambda.reflect.proxy;
 
+import net.kyori.lambda.collection.LoadingMap;
+import net.kyori.lambda.function.ThrowingFunction;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * An abstract implementation of an invocation handler that uses {@link MethodHandle method handles}.
  */
-public abstract class MethodHandleInvocationHandler implements InvocationHandler {
-  protected final MethodHandles.Lookup lookup;
+public abstract class CachedMethodHandleInvocationHandler extends MethodHandleInvocationHandler {
+  // A cache of unbound method handles.
+  private final Map<Method, MethodHandle> unboundCache = LoadingMap.concurrent(ThrowingFunction.of(this.lookup::unreflect));
+  // A cache of bound method handles.
+  private final Map<Method, MethodHandle> cache = LoadingMap.concurrent(method -> {
+    final Object target = this.target(method);
+    return this.unboundCache.get(method).bindTo(target);
+  });
 
   /**
-   * Creates a method handle invocation handler.
+   * Creates a method handle invocation handler, with an unbound cache.
    *
-   * @param lookup the lookup
+   * @param lookup the method handle lookup
    */
-  protected MethodHandleInvocationHandler(final MethodHandles.@NonNull Lookup lookup) {
-    this.lookup = lookup;
+  public CachedMethodHandleInvocationHandler(final MethodHandles.@NonNull Lookup lookup) {
+    super(lookup);
   }
 
   @Override
-  public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-    return this.handle(proxy, method).invokeWithArguments(args);
+  protected @NonNull MethodHandle handle(final @NonNull Object proxy, final @NonNull Method method) {
+    return this.cache.get(method);
   }
-
-  protected @NonNull MethodHandle handle(final @NonNull Object proxy, final @NonNull Method method) throws IllegalAccessException {
-    return this.lookup.unreflect(method).bindTo(this.target(method));
-  }
-
-  protected abstract @NonNull Object target(final @NonNull Method method);
 }

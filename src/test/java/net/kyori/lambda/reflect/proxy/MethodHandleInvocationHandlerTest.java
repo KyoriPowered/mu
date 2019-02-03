@@ -26,15 +26,30 @@ package net.kyori.lambda.reflect.proxy;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;
 
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MethodHandleInvocationHandlerTest {
   @Test
-  void test() {
+  void testUncached() {
     final B b = new B();
-    final A a = Proxies.create(A.class, new MethodHandleInvocationHandler() {
+    final A a = Proxies.create(A.class, new MethodHandleInvocationHandler(MethodHandles.lookup()) {
+      @Override
+      protected @NonNull Object target(final @NonNull Method method) {
+        return b;
+      }
+    });
+
+    assertEquals("foo", a.foo());
+    assertEquals("bar", a.bar("bar"));
+  }
+
+  @Test
+  void testCached() {
+    final B b = new B();
+    final A a = Proxies.create(A.class, new CachedMethodHandleInvocationHandler(MethodHandles.lookup()) {
       @Override
       protected @NonNull Object target(final @NonNull Method method) {
         return b;
