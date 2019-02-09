@@ -38,7 +38,7 @@ import java.util.List;
  */
 public interface MoreLists {
   /**
-   * Creates a list.
+   * Creates a mutable list.
    *
    * @param elements the elements
    * @param <E> the element type
@@ -46,7 +46,7 @@ public interface MoreLists {
    */
   @SafeVarargs
   @SuppressWarnings("varargs")
-  static <E> @NonNull List<E> of(final E... elements) {
+  static <E> @NonNull List<E> mutable(final E... elements) {
     final List<E> list = new ArrayList<>(elements.length);
     Collections.addAll(list, elements);
     return list;

@@ -25,7 +25,11 @@ package net.kyori.lambda.function;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Predicate;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MorePredicatesTest {
@@ -36,9 +40,45 @@ class MorePredicatesTest {
   }
 
   @Test
+  void testAlwaysFalse_and() {
+    final Predicate<String> predicate = string -> string.contains("meow");
+    assertSame(MorePredicates.alwaysFalse(), MorePredicates.<String>alwaysFalse().and(predicate));
+  }
+
+  @Test
+  void testAlwaysFalse_negate() {
+    assertTrue(MorePredicates.alwaysFalse().negate().test(null));
+    assertTrue(MorePredicates.alwaysFalse().negate().test("foo"));
+  }
+
+  @Test
+  void testAlwaysFalse_or() {
+    final Predicate<String> predicate = string -> string.contains("meow");
+    assertSame(predicate, MorePredicates.<String>alwaysFalse().or(predicate));
+  }
+
+  @Test
   void testAlwaysTrue() {
     assertTrue(MorePredicates.alwaysTrue().test(null));
     assertTrue(MorePredicates.alwaysTrue().test("foo"));
+  }
+
+  @Test
+  void testAlwaysTrue_and() {
+    final Predicate<String> predicate = string -> string.contains("meow");
+    assertSame(predicate, MorePredicates.<String>alwaysTrue().and(predicate));
+  }
+
+  @Test
+  void testAlwaysTrue_negate() {
+    assertFalse(MorePredicates.alwaysTrue().negate().test(null));
+    assertFalse(MorePredicates.alwaysTrue().negate().test("foo"));
+  }
+
+  @Test
+  void testAlwaysTrue_or() {
+    final Predicate<String> predicate = string -> string.contains("meow");
+    assertNotSame(predicate, MorePredicates.<String>alwaysTrue().or(predicate));
   }
 
   @Test
@@ -48,9 +88,21 @@ class MorePredicatesTest {
   }
 
   @Test
+  void testIsNull_negate() {
+    assertFalse(MorePredicates.isNull().negate().test(null));
+    assertTrue(MorePredicates.isNull().negate().test("foo"));
+  }
+
+  @Test
   void testNonNull() {
     assertFalse(MorePredicates.nonNull().test(null));
     assertTrue(MorePredicates.nonNull().test("foo"));
+  }
+
+  @Test
+  void testNonNull_negate() {
+    assertTrue(MorePredicates.nonNull().negate().test(null));
+    assertFalse(MorePredicates.nonNull().negate().test("foo"));
   }
 
   @Test

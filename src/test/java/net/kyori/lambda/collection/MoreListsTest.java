@@ -29,7 +29,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 class MoreListsTest {
   @Test
-  void test() {
-    assertThat(MoreLists.of("def", "abc", "ghi")).containsExactly("def", "abc", "ghi").inOrder();
+  void testMutable() {
+    assertThat(MoreLists.mutable("def", "abc", "ghi")).containsExactly("def", "abc", "ghi").inOrder();
   }
 }

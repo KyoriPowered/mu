@@ -29,7 +29,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 class MoreSetsTest {
   @Test
-  void test() {
-    assertThat(MoreSets.of("abc", "def", "ghi")).containsExactly("abc", "def", "ghi");
+  void testMutable() {
+    assertThat(MoreSets.mutable("abc", "def", "ghi")).containsExactly("abc", "def", "ghi");
   }
 }

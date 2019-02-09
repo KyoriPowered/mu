@@ -28,7 +28,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.Map;
 import java.util.function.Function;
 
-/* package */ final class LoadingMapImpl<K, V> implements ForwardingMap<K, V>, LoadingMap<K, V> {
+/* package */ final class LoadingMapImpl<K, V> extends ForwardingMap.Impl<K, V> implements LoadingMap<K, V> {
   private final Map<K, V> map;
   private final Function<K, V> function;
 

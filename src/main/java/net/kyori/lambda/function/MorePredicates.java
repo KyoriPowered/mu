@@ -25,7 +25,6 @@ package net.kyori.lambda.function;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Objects;
 import java.util.function.Predicate;
 
 /*
@@ -36,11 +35,6 @@ import java.util.function.Predicate;
  * A collection of utilities for working with {@link Predicate}.
  */
 public final class MorePredicates {
-  private static final Predicate<?> ALWAYS_FALSE = input -> false;
-  private static final Predicate<?> ALWAYS_TRUE = input -> true;
-  private static final Predicate<?> IS_NULL = Objects::isNull;
-  private static final Predicate<?> NON_NULL = Objects::nonNull;
-
   private MorePredicates() {
   }
 
@@ -52,7 +46,7 @@ public final class MorePredicates {
    */
   @SuppressWarnings("unchecked")
   public static <T> @NonNull Predicate<T> alwaysFalse() {
-    return (Predicate<T>) ALWAYS_FALSE;
+    return (Predicate<T>) Impl.ALWAYS_FALSE;
   }
 
   /**
@@ -63,7 +57,7 @@ public final class MorePredicates {
    */
   @SuppressWarnings("unchecked")
   public static <T> @NonNull Predicate<T> alwaysTrue() {
-    return (Predicate<T>) ALWAYS_TRUE;
+    return (Predicate<T>) Impl.ALWAYS_TRUE;
   }
 
   /**
@@ -74,7 +68,7 @@ public final class MorePredicates {
    */
   @SuppressWarnings("unchecked")
   public static <T> @NonNull Predicate<T> isNull() {
-    return (Predicate<T>) IS_NULL;
+    return (Predicate<T>) Impl.IS_NULL;
   }
 
   /**
@@ -85,7 +79,7 @@ public final class MorePredicates {
    */
   @SuppressWarnings("unchecked")
   public static <T> @NonNull Predicate<T> nonNull() {
-    return (Predicate<T>) NON_NULL;
+    return (Predicate<T>) Impl.NON_NULL;
   }
 
   /**
@@ -98,5 +92,28 @@ public final class MorePredicates {
    */
   public static <T, U> @NonNull Predicate<T> instanceOf(final @NonNull Class<U> type) {
     return type::isInstance;
+  }
+
+  private enum Impl implements Predicate<Object> {
+    ALWAYS_FALSE {
+      @Override public boolean test(final Object object) { return false; }
+      @Override public Predicate<Object> and(final Predicate<? super Object> other) { return this; }
+      @Override public Predicate<Object> negate() { return ALWAYS_TRUE; }
+      @Override public Predicate<Object> or(final Predicate<? super Object> other) { return other; }
+    },
+    ALWAYS_TRUE {
+      @Override public boolean test(final Object object) { return true; }
+      @Override public Predicate<Object> and(final Predicate<? super Object> other) { return other; }
+      @Override public Predicate<Object> negate() { return ALWAYS_FALSE; }
+      @Override public Predicate<Object> or(final Predicate<? super Object> other) { return this; }
+    },
+    IS_NULL {
+      @Override public boolean test(final Object object) { return object == null; }
+      @Override public Predicate<Object> negate() { return NON_NULL; }
+    },
+    NON_NULL {
+      @Override public boolean test(final Object object) { return object != null; }
+      @Override public Predicate<Object> negate() { return IS_NULL; }
+    };
   }
 }

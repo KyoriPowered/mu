@@ -24,12 +24,24 @@
 package net.kyori.lambda.collection;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A map which forwards all its method calls to another map.
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public interface ForwardingMap<K, V> extends Map<K, V> {
+  /**
+   * Gets the forwarded map that methods are forwarded to.
+   *
+   * @return the forwarded map
+   */
   @NonNull Map<K, V> map();
 
   @Override
@@ -90,5 +102,26 @@ public interface ForwardingMap<K, V> extends Map<K, V> {
   @Override
   default @NonNull Set<Entry<K, V>> entrySet() {
     return this.map().entrySet();
+  }
+
+  /**
+   * An abstract implementation of a forwarding map.
+   *
+   * <p>This implementation delegates {@link #hashCode()} and {@link #equals(Object)} to the {@link #map() forwarded map}.</p>
+   *
+   * @param <K> the key type
+   * @param <V> the value type
+   */
+  abstract class Impl<K, V> implements ForwardingMap<K, V> {
+    @Override
+    public int hashCode() {
+      return this.map().hashCode();
+    }
+
+    @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+    public boolean equals(final @Nullable Object other) {
+      return this == other || this.map().equals(other);
+    }
   }
 }

@@ -47,10 +47,20 @@ class ExceptionsTest {
   }
 
   @Test
-  void testThrowIfUnchecked() {
+  void testThrowIfUnchecked_checked() {
     assertDoesNotThrow(() -> Exceptions.throwIfUnchecked(new Exception("should not be thrown")));
-    final RuntimeException re = new RuntimeException("should be thrown");
-    assertSame(re, assertThrows(RuntimeException.class, () -> Exceptions.throwIfUnchecked(re)));
+  }
+
+  @Test
+  void testThrowIfUnchecked_runtimeException() {
+    final RuntimeException exception = new RuntimeException("should be thrown");
+    assertSame(exception, assertThrows(RuntimeException.class, () -> Exceptions.throwIfUnchecked(exception)));
+  }
+
+  @Test
+  void testThrowIfUnchecked_error() {
+    final Error error = new Error("should be thrown");
+    assertSame(error, assertThrows(Error.class, () -> Exceptions.throwIfUnchecked(error)));
   }
 
   @Test

@@ -23,6 +23,7 @@
  */
 package net.kyori.lambda.collection;
 
+import com.google.common.collect.Iterators;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -49,8 +50,15 @@ class MoreIterablesTest {
   }
 
   @Test
-  void testStream() {
+  void testStream_collection() {
     final Iterable<String> iterable = Arrays.asList("abc", "def");
+    final Stream<String> stream = MoreIterables.stream(iterable);
+    assertThat(stream).containsExactly("abc", "def").inOrder();
+  }
+
+  @Test
+  void testStream_iterable() {
+    final Iterable<String> iterable = () -> Iterators.forArray("abc", "def");
     final Stream<String> stream = MoreIterables.stream(iterable);
     assertThat(stream).containsExactly("abc", "def").inOrder();
   }

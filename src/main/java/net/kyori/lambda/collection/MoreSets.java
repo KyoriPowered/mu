@@ -38,7 +38,7 @@ import java.util.Set;
  */
 public interface MoreSets {
   /**
-   * Creates a set.
+   * Creates a mutable set.
    *
    * @param elements the elements
    * @param <E> the element type
@@ -46,7 +46,7 @@ public interface MoreSets {
    */
   @SafeVarargs
   @SuppressWarnings("varargs")
-  static <E> @NonNull Set<E> of(final E... elements) {
+  static <E> @NonNull Set<E> mutable(final E... elements) {
     final Set<E> set = new HashSet<>(elements.length);
     Collections.addAll(set, elements);
     return set;
