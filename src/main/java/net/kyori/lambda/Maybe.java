@@ -112,14 +112,14 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
    *
    * @return {@code true} if this {@code Maybe} is empty
    */
-  boolean isEmpty();
+  boolean isNothing();
 
   /**
    * Returns {@code true} if this {@code Maybe} has a value.
    *
    * @return {@code true} if this {@code Maybe} has a value
    */
-  boolean isPopulated();
+  boolean isJust();
 
   /**
    * Gets the value if present, otherwise throws.
@@ -135,7 +135,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
    * @param defaultValue the default value
    * @return the value if present, otherwise {@code defaultValue}
    */
-  T getOrDefault(final @Nullable T defaultValue);
+  T orDefault(final @Nullable T defaultValue);
 
   /**
    * Gets the value if present, otherwise returns a value supplied by {@code other}.
@@ -143,7 +143,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
    * @param other the other value supplier
    * @return the value if present, otherwise a value supplied by {@code other}
    */
-  T getOrGet(final @NonNull Supplier<? extends T> other);
+  T orGet(final @NonNull Supplier<? extends T> other);
 
   /**
    * Gets the value if present, otherwise throws an exception of type {@code X} supplied by {@code supplier} if not.
@@ -153,7 +153,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
    * @return the value
    * @throws X if no value is present
    */
-  <X extends Throwable> T getOrThrow(final @NonNull Supplier<X> supplier) throws X;
+  <X extends Throwable> T orThrow(final @NonNull Supplier<X> supplier) throws X;
 
   /**
    * Returns a {@code Maybe} containing the value if it is present, otherwise returns {@code that}.
@@ -198,19 +198,20 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   <U> @NonNull Maybe<U> flatMap(final @NonNull Function<? super T, ? extends Maybe<? extends U>> function);
 
   /**
-   * Provides {@code just} with the value if it is present.
+   * Runs {@code nothing} if there is no value present.
    *
-   * @param action the action
+   * @param nothing the action to run if nothing is present
+   * @return this maybe
    */
-  void with(final @NonNull Consumer<? super T> action);
+  @NonNull Maybe<T> ifNothing(final @NonNull Runnable nothing);
 
   /**
-   * Provides {@code action} with the value if it is present, otherwise runs {@code nothing}.
+   * Provides {@code just} with the value if it is present.
    *
-   * @param action the action to run if something is present
-   * @param nothing the action to run if nothing is present
+   * @param just the action to run if something is present
+   * @return this maybe
    */
-  void withOrElse(final @NonNull Consumer<? super T> action, final @NonNull Runnable nothing);
+  @NonNull Maybe<T> ifJust(final @NonNull Consumer<? super T> just);
 
   /**
    * Returns a {@code Stream} containing the value if it is present, otherwise an empty {@code Stream}.
@@ -251,7 +252,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   }
 
   /**
-   * Returns the first {@link #isPopulated() populated} {@code Maybe}, or an empty {@code Maybe}.
+   * Returns the first {@link #isJust() populated} {@code Maybe}, or an empty {@code Maybe}.
    *
    * @param maybes the possible options
    * @param <T> the value type
@@ -261,7 +262,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   @SuppressWarnings("unchecked")
   static <T> @NonNull Maybe<T> first(final @NonNull Maybe<? extends T>... maybes) {
     for(final Maybe<? extends T> maybe : maybes) {
-      if(maybe.isPopulated()) {
+      if(maybe.isJust()) {
         return (Maybe<T>) maybe;
       }
     }
@@ -269,7 +270,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   }
 
   /**
-   * Returns the first {@link #isPopulated() populated} {@code Maybe}, or an empty {@code Maybe}.
+   * Returns the first {@link #isJust() populated} {@code Maybe}, or an empty {@code Maybe}.
    *
    * @param maybes the possible options
    * @param <T> the value type
@@ -278,7 +279,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   @SuppressWarnings("unchecked")
   static <T> @NonNull Maybe<T> first(final @NonNull Iterable<Maybe<? extends T>> maybes) {
     for(final Maybe<? extends T> maybe : maybes) {
-      if(maybe.isPopulated()) {
+      if(maybe.isJust()) {
         return (Maybe<T>) maybe;
       }
     }
@@ -297,12 +298,12 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isNothing() {
       return true;
     }
 
     @Override
-    public boolean isPopulated() {
+    public boolean isJust() {
       return false;
     }
 
@@ -312,17 +313,17 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     }
 
     @Override
-    public T getOrDefault(final @Nullable T defaultValue) {
+    public T orDefault(final @Nullable T defaultValue) {
       return defaultValue;
     }
 
     @Override
-    public T getOrGet(final @NonNull Supplier<? extends T> other) {
+    public T orGet(final @NonNull Supplier<? extends T> other) {
       return other.get();
     }
 
     @Override
-    public <X extends Throwable> T getOrThrow(final @NonNull Supplier<X> supplier) throws X {
+    public <X extends Throwable> T orThrow(final @NonNull Supplier<X> supplier) throws X {
       throw supplier.get();
     }
 
@@ -354,13 +355,14 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     }
 
     @Override
-    public void with(final @NonNull Consumer<? super T> action) {
-      // noop
+    public @NonNull Maybe<T> ifNothing(final @NonNull Runnable nothing) {
+      nothing.run();
+      return this;
     }
 
     @Override
-    public void withOrElse(final @NonNull Consumer<? super T> action, final @NonNull Runnable nothing) {
-      nothing.run();
+    public @NonNull Maybe<T> ifJust(final @NonNull Consumer<? super T> just) {
+      return this;
     }
 
     @Override
@@ -417,12 +419,12 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isNothing() {
       return false;
     }
 
     @Override
-    public boolean isPopulated() {
+    public boolean isJust() {
       return true;
     }
 
@@ -432,17 +434,17 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     }
 
     @Override
-    public T getOrDefault(final @Nullable T defaultValue) {
+    public T orDefault(final @Nullable T defaultValue) {
       return this.value;
     }
 
     @Override
-    public T getOrGet(final @NonNull Supplier<? extends T> other) {
+    public T orGet(final @NonNull Supplier<? extends T> other) {
       return this.value;
     }
 
     @Override
-    public <X extends Throwable> T getOrThrow(final @NonNull Supplier<X> supplier) {
+    public <X extends Throwable> T orThrow(final @NonNull Supplier<X> supplier) {
       return this.value;
     }
 
@@ -473,13 +475,14 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     }
 
     @Override
-    public void with(final @NonNull Consumer<? super T> action) {
-      action.accept(this.value);
+    public @NonNull Maybe<T> ifNothing(final @NonNull Runnable nothing) {
+      return this;
     }
 
     @Override
-    public void withOrElse(final @NonNull Consumer<? super T> action, final @NonNull Runnable nothing) {
-      action.accept(this.value);
+    public @NonNull Maybe<T> ifJust(final @NonNull Consumer<? super T> just) {
+      just.accept(this.value);
+      return this;
     }
 
     @Override

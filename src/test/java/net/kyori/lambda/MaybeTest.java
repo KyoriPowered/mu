@@ -62,15 +62,15 @@ class MaybeTest {
   }
 
   @Test
-  void testIsEmpty() {
-    assertTrue(Maybe.nothing().isEmpty());
-    assertFalse(Maybe.just("foo").isEmpty());
+  void testIsNothing() {
+    assertTrue(Maybe.nothing().isNothing());
+    assertFalse(Maybe.just("foo").isNothing());
   }
 
   @Test
-  void testIsPopulated() {
-    assertFalse(Maybe.nothing().isPopulated());
-    assertTrue(Maybe.just("foo").isPopulated());
+  void testIsJust() {
+    assertFalse(Maybe.nothing().isJust());
+    assertTrue(Maybe.just("foo").isJust());
   }
 
   @Test
@@ -80,21 +80,21 @@ class MaybeTest {
   }
 
   @Test
-  void testGetOrDefault() {
-    assertEquals("bar", Maybe.nothing().getOrDefault("bar"));
-    assertEquals("foo", Maybe.just("foo").getOrDefault("bar"));
+  void testOrDefault() {
+    assertEquals("bar", Maybe.nothing().orDefault("bar"));
+    assertEquals("foo", Maybe.just("foo").orDefault("bar"));
   }
 
   @Test
-  void testGetOrGet() {
-    assertEquals("bar", Maybe.nothing().getOrGet(() -> "bar"));
-    assertEquals("foo", Maybe.just("foo").getOrGet(() -> "bar"));
+  void testOrGet() {
+    assertEquals("bar", Maybe.nothing().orGet(() -> "bar"));
+    assertEquals("foo", Maybe.just("foo").orGet(() -> "bar"));
   }
 
   @Test
-  void testGetOrThrow() {
-    assertThrows(Expected.class, () -> Maybe.nothing().getOrThrow(Expected::new));
-    assertEquals("foo", Maybe.just("foo").getOrThrow(Expected::new));
+  void testOrThrow() {
+    assertThrows(Expected.class, () -> Maybe.nothing().orThrow(Expected::new));
+    assertEquals("foo", Maybe.just("foo").orThrow(Expected::new));
   }
 
   @Test
@@ -110,42 +110,38 @@ class MaybeTest {
 
   @Test
   void testFilter() {
-    assertTrue(Maybe.<String>nothing().filter(String::isEmpty).isEmpty());
-    assertTrue(Maybe.just("foo").filter(String::isEmpty).isEmpty());
+    assertTrue(Maybe.<String>nothing().filter(String::isEmpty).isNothing());
+    assertTrue(Maybe.just("foo").filter(String::isEmpty).isNothing());
   }
 
   @Test
   void testMap() {
-    assertTrue(Maybe.nothing().map(nothing -> "foo").isEmpty());
+    assertTrue(Maybe.nothing().map(nothing -> "foo").isNothing());
     assertEquals("!foo!", Maybe.just("foo").map(string -> '!' + string + '!').get());
   }
 
   @Test
   void testFlatMap() {
-    assertTrue(Maybe.nothing().flatMap(nothing -> Maybe.just("foo")).isEmpty());
+    assertTrue(Maybe.nothing().flatMap(nothing -> Maybe.just("foo")).isNothing());
     assertEquals("!foo!", Maybe.just("foo").flatMap(string -> Maybe.just('!' + string + '!')).get());
   }
 
   @Test
-  void testWith() {
+  void testIfNothing() {
     final AtomicInteger nothing = new AtomicInteger();
-    Maybe.nothing().with(v -> nothing.incrementAndGet());
-    assertEquals(0, nothing.get());
-    final AtomicInteger just = new AtomicInteger();
-    Maybe.just("foo").with(v -> just.incrementAndGet());
-    assertEquals(1, just.get());
+    Maybe.nothing().ifNothing(nothing::incrementAndGet);
+    assertEquals(1, nothing.get());
+    Maybe.just("foo").ifNothing(nothing::incrementAndGet);
+    assertEquals(1, nothing.get());
   }
 
   @Test
-  void testWithOrElse() {
+  void testIfJust() {
     final AtomicInteger just = new AtomicInteger();
-    final AtomicInteger nothing = new AtomicInteger();
-    Maybe.nothing().withOrElse(v -> just.incrementAndGet(), nothing::incrementAndGet);
+    Maybe.nothing().ifJust(value -> just.incrementAndGet());
     assertEquals(0, just.get());
-    assertEquals(1, nothing.get());
-    Maybe.just("foo").withOrElse(v -> just.incrementAndGet(), nothing::incrementAndGet);
+    Maybe.just("foo").ifJust(value -> just.incrementAndGet());
     assertEquals(1, just.get());
-    assertEquals(1, nothing.get());
   }
 
   @Test
