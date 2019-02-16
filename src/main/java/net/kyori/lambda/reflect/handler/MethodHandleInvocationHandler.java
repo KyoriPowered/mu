@@ -21,59 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.lambda.reflect.proxy;
+package net.kyori.lambda.reflect.handler;
 
+import net.kyori.lambda.reflect.invoke.MethodHandleSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.junit.jupiter.api.Test;
 
-import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandle;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+/**
+ * An implementation of an invocation handler that uses {@link MethodHandle method handles}.
+ */
+public class MethodHandleInvocationHandler implements InvocationHandler {
+  private final MethodHandleSource source;
 
-public class MethodHandleInvocationHandlerTest {
-  @Test
-  void testUncached() {
-    final B b = new B();
-    final A a = Proxies.create(A.class, new MethodHandleInvocationHandler(MethodHandles.lookup()) {
-      @Override
-      protected @NonNull Object target(final @NonNull Method method) {
-        return b;
-      }
-    });
-
-    assertEquals("foo", a.foo());
-    assertEquals("bar", a.bar("bar"));
+  public MethodHandleInvocationHandler(final @NonNull MethodHandleSource source) {
+    this.source = source;
   }
 
-  @Test
-  void testCached() {
-    final B b = new B();
-    final A a = Proxies.create(A.class, new CachedMethodHandleInvocationHandler(MethodHandles.lookup()) {
-      @Override
-      protected @NonNull Object target(final @NonNull Method method) {
-        return b;
-      }
-    });
-
-    assertEquals("foo", a.foo());
-    assertEquals("bar", a.bar("bar"));
-  }
-
-  public interface A {
-    String foo();
-    String bar(final String string);
-  }
-
-  private static class B implements A {
-    @Override
-    public String foo() {
-      return "foo";
-    }
-
-    @Override
-    public String bar(final String string) {
-      return string;
-    }
+  @Override
+  public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+    return this.source.handle(method).invokeWithArguments(args);
   }
 }

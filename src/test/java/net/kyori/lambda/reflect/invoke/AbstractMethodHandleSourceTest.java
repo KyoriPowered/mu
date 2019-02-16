@@ -21,38 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.lambda.reflect.proxy;
+package net.kyori.lambda.reflect.invoke;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import net.kyori.lambda.reflect.handler.MethodHandleInvocationHandler;
+import net.kyori.lambda.reflect.proxy.Proxies;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
+import java.util.function.Function;
 
-/**
- * An abstract implementation of an invocation handler that uses {@link MethodHandle method handles}.
- */
-public abstract class MethodHandleInvocationHandler implements InvocationHandler {
-  protected final MethodHandles.Lookup lookup;
-
-  /**
-   * Creates a method handle invocation handler.
-   *
-   * @param lookup the lookup
-   */
-  protected MethodHandleInvocationHandler(final MethodHandles.@NonNull Lookup lookup) {
-    this.lookup = lookup;
+public abstract class AbstractMethodHandleSourceTest {
+  protected A create(final Function<B, MethodHandleSource> source) {
+    final B b = new B();
+    return Proxies.create(A.class, new MethodHandleInvocationHandler(source.apply(b)));
   }
 
-  @Override
-  public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-    return this.handle(proxy, method).invokeWithArguments(args);
+  public interface A {
+    String foo();
+    String bar(final String string);
   }
 
-  protected @NonNull MethodHandle handle(final @NonNull Object proxy, final @NonNull Method method) throws IllegalAccessException {
-    return this.lookup.unreflect(method).bindTo(this.target(method));
-  }
+  public static class B implements A {
+    @Override
+    public String foo() {
+      return "foo";
+    }
 
-  protected abstract @NonNull Object target(final @NonNull Method method);
+    @Override
+    public String bar(final String string) {
+      return string;
+    }
+  }
 }

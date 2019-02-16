@@ -21,40 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.lambda.reflect.proxy;
+package net.kyori.lambda.reflect.invoke;
 
-import net.kyori.lambda.collection.LoadingMap;
-import net.kyori.lambda.function.ThrowingFunction;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.junit.jupiter.api.Test;
 
-import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * An abstract implementation of an invocation handler that uses {@link MethodHandle method handles}.
- */
-public abstract class CachedMethodHandleInvocationHandler extends MethodHandleInvocationHandler {
-  // A cache of unbound method handles.
-  private final Map<Method, MethodHandle> unboundCache = LoadingMap.concurrent(ThrowingFunction.of(this.lookup::unreflect));
-  // A cache of bound method handles.
-  private final Map<Method, MethodHandle> cache = LoadingMap.concurrent(method -> {
-    final Object target = this.target(method);
-    return this.unboundCache.get(method).bindTo(target);
-  });
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-  /**
-   * Creates a method handle invocation handler, with an unbound cache.
-   *
-   * @param lookup the method handle lookup
-   */
-  public CachedMethodHandleInvocationHandler(final MethodHandles.@NonNull Lookup lookup) {
-    super(lookup);
-  }
+class CachedMethodHandleSourceTest extends AbstractMethodHandleSourceTest {
+  @Test
+  void test() {
+    final AtomicInteger targetSelects = new AtomicInteger();
+    final A a = this.create(b -> new CachedMethodHandleSource(new TargetBindingLookupSeekingMethodHandleSource() {
+      @Override
+      public @NonNull Object target(final Method method) {
+        targetSelects.incrementAndGet();
+        return b;
+      }
 
-  @Override
-  protected @NonNull MethodHandle handle(final @NonNull Object proxy, final @NonNull Method method) {
-    return this.cache.get(method);
+      @Override
+      public MethodHandles.@NonNull Lookup lookup(final @NonNull Class<?> klass) {
+        return MethodHandles.lookup();
+      }
+    }));
+
+    assertEquals("foo", a.foo());
+    assertEquals("foo", a.foo());
+    assertEquals("bar", a.bar("bar"));
+    assertEquals("bar", a.bar("bar"));
+    assertEquals(2, targetSelects.get());
   }
 }
