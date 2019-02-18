@@ -23,7 +23,6 @@
  */
 package net.kyori.lambda.reflect.invoke;
 
-import net.kyori.lambda.reflect.handler.MethodHandleInvocationHandler;
 import net.kyori.lambda.reflect.proxy.Proxies;
 
 import java.util.function.Function;

@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.lambda.reflect.handler;
+package net.kyori.lambda.reflect.invoke;
 
-import net.kyori.lambda.reflect.invoke.MethodHandleSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.invoke.MethodHandle;
