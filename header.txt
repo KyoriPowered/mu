@@ -1,4 +1,4 @@
-This file is part of lambda, licensed under the MIT License.
+This file is part of mu, licensed under the MIT License.
 
 Copyright (c) 2018-2019 KyoriPowered
 
