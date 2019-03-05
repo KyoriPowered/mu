@@ -21,15 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.collection;
+package net.kyori.mu.stream;
 
+import com.google.common.collect.Iterators;
 import org.junit.jupiter.api.Test;
 
-import static com.google.common.truth.Truth.assertThat;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
-class MuSetsTest {
+import static com.google.common.truth.Truth8.assertThat;
+
+class MuStreamsTest {
   @Test
-  void testMutable() {
-    assertThat(MuSets.mutable("abc", "def", "ghi")).containsExactly("abc", "def", "ghi");
+  void testConcat() {
+    final Stream<String> stream = MuStreams.concat(
+      Stream.of("abc"),
+      Stream.of("def", "ghi"),
+      Stream.of("jkl")
+    );
+    assertThat(stream).containsExactly("abc", "def", "ghi", "jkl").inOrder();
+  }
+
+  @Test
+  void testStream_collection() {
+    final Iterable<String> iterable = Arrays.asList("abc", "def");
+    final Stream<String> stream = MuStreams.of(iterable);
+    assertThat(stream).containsExactly("abc", "def").inOrder();
+  }
+
+  @Test
+  void testStream_iterable() {
+    final Iterable<String> iterable = () -> Iterators.forArray("abc", "def");
+    final Stream<String> stream = MuStreams.of(iterable);
+    assertThat(stream).containsExactly("abc", "def").inOrder();
   }
 }

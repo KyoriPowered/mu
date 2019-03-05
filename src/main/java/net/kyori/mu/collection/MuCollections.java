@@ -40,19 +40,19 @@ public interface MuCollections {
    * Reduces a collection to a single element of the inhabiting type depending on the collection's size.
    *
    * <p>If the collection contains zero elements, {@code empty} will be chosen. A singleton collection will have its only
-   * element selected. Otherwise, {@code function} is used to reduce the collection to a single element of its type.</p>
+   * element selected. Otherwise, {@code reducer} is used to reduce the collection to a single element of its type.</p>
    *
    * @param collection the collection
-   * @param empty the empty element
-   * @param function the flattener
+   * @param empty the element to return if {@code collection} is empty
+   * @param reducer the reducer
    * @param <E> the element type
    * @return an element
    */
-  static <E> /* @Nullable */ E squash(final @NonNull Collection<? extends E> collection, final /* @Nullable */ E empty, final @NonNull Function<Iterable<? extends E>, ? extends E> function) {
+  static <E> /* @Nullable */ E reduce(final @NonNull Collection<? extends E> collection, final /* @Nullable */ E empty, final @NonNull Function<Iterable<? extends E>, ? extends E> reducer) {
     switch(collection.size()) {
       case 0: return empty;
       case 1: return collection.iterator().next();
     }
-    return MuIterables.reduce(collection, function);
+    return reducer.apply(collection);
   }
 }

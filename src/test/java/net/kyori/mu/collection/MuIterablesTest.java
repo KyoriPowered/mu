@@ -23,14 +23,13 @@
  */
 package net.kyori.mu.collection;
 
-import com.google.common.collect.Iterators;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.Collections;
+import java.util.function.Function;
 
 import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth8.assertThat;
 
 class MuIterablesTest {
   @Test
@@ -41,25 +40,38 @@ class MuIterablesTest {
 
   @Test
   void testReduce() {
+    final Function<Iterable<? extends String>, String> reducer = strings -> String.join("-", strings);
+
     assertThat(
       MuIterables.reduce(
-        Arrays.asList("abc", "def", "ghi"),
-        strings -> String.join("-", strings)
+        () -> Collections.<String>emptyList().iterator(),
+        "",
+        reducer
+      )
+    ).isEmpty();
+    // forwards to MuCollections.reduce
+    assertThat(
+      MuIterables.reduce(
+        Collections.emptyList(),
+        "",
+        reducer
+      )
+    ).isEmpty();
+
+    assertThat(
+      MuIterables.reduce(
+        () -> Collections.singletonList("abc").iterator(),
+        "",
+        reducer
+      )
+    ).isEqualTo("abc");
+
+    assertThat(
+      MuIterables.reduce(
+        () -> Arrays.asList("abc", "def", "ghi").iterator(),
+        "",
+        reducer
       )
     ).isEqualTo("abc-def-ghi");
-  }
-
-  @Test
-  void testStream_collection() {
-    final Iterable<String> iterable = Arrays.asList("abc", "def");
-    final Stream<String> stream = MuIterables.stream(iterable);
-    assertThat(stream).containsExactly("abc", "def").inOrder();
-  }
-
-  @Test
-  void testStream_iterable() {
-    final Iterable<String> iterable = () -> Iterators.forArray("abc", "def");
-    final Stream<String> stream = MuIterables.stream(iterable);
-    assertThat(stream).containsExactly("abc", "def").inOrder();
   }
 }

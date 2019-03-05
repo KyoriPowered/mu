@@ -26,10 +26,9 @@ package net.kyori.mu.collection;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /*
  * Name is prefixed with 'Mu' to avoid conflict with com.google.common.collect.Iterables
@@ -58,28 +57,33 @@ public interface MuIterables {
   }
 
   /**
-   * Reduces {@code iterable} into a single element.
+   * Reduces a iterable to a single element of the inhabiting type depending on the iterable's size.
+   *
+   * <p>If the iterable contains zero elements, {@code empty} will be chosen. A singleton iterable will have its only
+   * element selected. Otherwise, {@code reducer} is used to reduce the iterable to a single element of its type.</p>
    *
    * @param iterable the iterable
-   * @param function the flattener
+   * @param empty the element to return if {@code iterable} is empty
+   * @param reducer the reducer
    * @param <E> the element type
-   * @return a single element
+   * @return an element
    */
-  static <E> /* @Nullable */ E reduce(final /* @Nullable */ Iterable<? extends E> iterable, final @NonNull Function<Iterable<? extends E>, ? extends E> function) {
-    return function.apply(iterable);
-  }
-
-  /**
-   * Creates a stream.
-   *
-   * @param iterable the iterable
-   * @param <E> the element type
-   * @return a stream
-   */
-  static <E> @NonNull Stream<E> stream(final @NonNull Iterable<E> iterable) {
+  @SuppressWarnings("unchecked")
+  static <E> /* @Nullable */ E reduce(final @NonNull Iterable<? extends E> iterable, final /* @Nullable */ E empty, final @NonNull Function<Iterable<? extends E>, ? extends E> reducer) {
     if(iterable instanceof Collection<?>) {
-      return ((Collection<E>) iterable).stream();
+      return MuCollections.reduce((Collection<E>) iterable, empty, reducer);
     }
-    return StreamSupport.stream(iterable.spliterator(), false);
+
+    final Iterator<? extends E> iterator = iterable.iterator();
+    if(!iterator.hasNext()) {
+      return empty;
+    }
+
+    final E first = iterator.next();
+    if(!iterator.hasNext()) {
+      return first;
+    }
+
+    return reducer.apply(iterable);
   }
 }

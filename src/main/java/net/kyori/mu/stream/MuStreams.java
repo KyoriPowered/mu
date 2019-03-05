@@ -21,34 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.collection;
+package net.kyori.mu.stream;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /*
- * Name is prefixed with 'Mu' to avoid conflict with com.google.common.collect.Lists
+ * Name is prefixed with 'Mu' to avoid conflict with com.google.common.collect.Streams
  */
 
 /**
- * A collection of utilities for working with lists.
+ * A collection of utilities for working with streams.
  */
-public interface MuLists {
+public interface MuStreams {
   /**
-   * Creates a mutable list.
+   * Creates a stream whose elements are all the elements of the first stream followed by all the elements of the second stream, and so on.
    *
-   * @param elements the elements
-   * @param <E> the element type
-   * @return the list
+   * @param streams the streams
+   * @param <T> the element type
+   * @return the concatenated stream
+   * @see Stream#concat(Stream, Stream)
    */
   @SafeVarargs
-  @SuppressWarnings("varargs")
-  static <E> @NonNull List<E> mutable(final E... elements) {
-    final List<E> list = new ArrayList<>(elements.length);
-    Collections.addAll(list, elements);
-    return list;
+  @SuppressWarnings({"unchecked", "varargs"})
+  static <T> @NonNull Stream<T> concat(final Stream<? extends T>... streams) {
+    return (Stream<T>) Stream.of(streams).reduce(Stream.empty(), Stream::concat);
+  }
+
+  /**
+   * Creates a stream.
+   *
+   * @param iterable the iterable
+   * @param <E> the element type
+   * @return a stream
+   */
+  static <E> @NonNull Stream<E> of(final @NonNull Iterable<E> iterable) {
+    if(iterable instanceof Collection<?>) {
+      return ((Collection<E>) iterable).stream();
+    }
+    return StreamSupport.stream(iterable.spliterator(), false);
   }
 }

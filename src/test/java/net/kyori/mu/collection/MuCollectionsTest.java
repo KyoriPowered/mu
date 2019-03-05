@@ -37,7 +37,7 @@ class MuCollectionsTest {
     final Function<Iterable<? extends String>, String> combiner = strings -> String.join("-", strings);
 
     assertThat(
-      MuCollections.squash(
+      MuCollections.reduce(
         Collections.emptyList(),
         "",
         combiner
@@ -45,7 +45,7 @@ class MuCollectionsTest {
     ).isEmpty();
 
     assertThat(
-      MuCollections.squash(
+      MuCollections.reduce(
         Collections.singletonList("abc"),
         "",
         combiner
@@ -53,7 +53,7 @@ class MuCollectionsTest {
     ).isEqualTo("abc");
 
     assertThat(
-      MuCollections.squash(
+      MuCollections.reduce(
         Arrays.asList("abc", "def", "ghi"),
         "",
         combiner
