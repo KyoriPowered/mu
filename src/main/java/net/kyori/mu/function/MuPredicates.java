@@ -39,6 +39,17 @@ public final class MuPredicates {
   }
 
   /**
+   * Negates the given predicate.
+   *
+   * @param predicate the predicate to negate
+   * @param <T> the type
+   * @return the negated predicate
+   */
+  public static <T> @NonNull Predicate<T> not(final @NonNull Predicate<T> predicate) {
+    return predicate.negate();
+  }
+
+  /**
    * Returns a predicate that always returns {@code false}.
    *
    * @param <T> the type

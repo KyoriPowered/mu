@@ -32,12 +32,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @FunctionalInterface
 public interface ExceptionHandler {
   /**
-   * An exception handler that does nothing.
+   * Gets an exception handler that does nothing.
    *
-   * <p>It is <b>highly</b> recommended to do something with exceptions.</p>
+   * <p>It is <b>highly</b> recommended that you <b>not</b> use the NOOP handler, and to actually do something with exceptions.</p>
+   *
+   * @return an exception handler that does nothing
    */
-  ExceptionHandler NOOP = (throwable, source) -> {
-  };
+  static @NonNull ExceptionHandler noop() {
+    return NopeExceptionHandler.INSTANCE;
+  }
 
   /**
    * Handles an exception.
@@ -55,4 +58,18 @@ public interface ExceptionHandler {
    * @param source the source
    */
   void handleException(final @NonNull Throwable throwable, final @Nullable Object source);
+}
+
+/**
+ * An exception handler that does nothing.
+ */
+final class NopeExceptionHandler implements ExceptionHandler {
+  static final NopeExceptionHandler INSTANCE = new NopeExceptionHandler();
+
+  private NopeExceptionHandler() {
+  }
+
+  @Override
+  public void handleException(final @NonNull Throwable throwable, final @Nullable Object source) {
+  }
 }

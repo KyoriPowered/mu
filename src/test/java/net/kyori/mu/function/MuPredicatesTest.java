@@ -34,6 +34,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MuPredicatesTest {
   @Test
+  void testNot() {
+    assertFalse(MuPredicates.not(MuPredicates.alwaysTrue()).test("foo"));
+    assertTrue(MuPredicates.not(MuPredicates.alwaysFalse()).test("foo"));
+  }
+
+  @Test
   void testAlwaysFalse() {
     assertFalse(MuPredicates.alwaysFalse().test(null));
     assertFalse(MuPredicates.alwaysFalse().test("foo"));
