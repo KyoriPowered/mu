@@ -32,7 +32,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class StringExaminer implements Examiner<String> {
+public class StringExaminer extends AbstractExaminer<String> {
   private static final Function<String, String> DEFAULT_ESCAPER = string -> string
     .replace("\"", "\\\"")
     .replace("\\", "\\\\")
@@ -54,32 +54,32 @@ public class StringExaminer implements Examiner<String> {
   }
 
   @Override
-  public <E> @NonNull String array(final @NonNull E[] array, final @NonNull Stream<String> elements) {
+  protected <E> @NonNull String array(final @NonNull E[] array, final @NonNull Stream<String> elements) {
     return elements.collect(COMMA_SQUARE);
   }
 
   @Override
-  public <E> @NonNull String collection(final @NonNull Collection<E> collection, final @NonNull Stream<String> elements) {
+  protected <E> @NonNull String collection(final @NonNull Collection<E> collection, final @NonNull Stream<String> elements) {
     return elements.collect(COMMA_SQUARE);
   }
 
   @Override
-  public @NonNull String examinable(final @NonNull Examinable examinable, final @NonNull Stream<Map.Entry<String, String>> properties) {
+  protected @NonNull String examinable(final @NonNull Examinable examinable, final @NonNull Stream<Map.Entry<String, String>> properties) {
     return examinable.examinableName() + properties.map(property -> property.getKey() + '=' + property.getValue()).collect(COMMA_CURLY);
   }
 
   @Override
-  public <K, V> @NonNull String map(final @NonNull Map<K, V> map, final @NonNull Stream<Map.Entry<String, String>> entries) {
+  protected <K, V> @NonNull String map(final @NonNull Map<K, V> map, final @NonNull Stream<Map.Entry<String, String>> entries) {
     return entries.map(entry -> entry.getKey() + '=' + entry.getValue()).collect(COMMA_CURLY);
   }
 
   @Override
-  public @NonNull String nil() {
+  protected @NonNull String nil() {
     return "null";
   }
 
   @Override
-  public @NonNull String scalar(final @NonNull Object value) {
+  protected @NonNull String scalar(final @NonNull Object value) {
     if(value instanceof Character) {
       return '\'' + this.escaper.apply(String.valueOf(value)) + '\'';
     } else if(value instanceof String) {
@@ -89,7 +89,7 @@ public class StringExaminer implements Examiner<String> {
   }
 
   @Override
-  public <T> @NonNull String stream(final @NonNull Stream<T> stream) {
+  protected <T> @NonNull String stream(final @NonNull Stream<T> stream) {
     return stream.map(this::examine).collect(COMMA_SQUARE);
   }
 }
