@@ -35,7 +35,7 @@ import java.util.function.Function;
  */
 public interface Types {
   /**
-   * Finds a class in the hierarchy matching the provided {@code type} and {@code function}.
+   * Finds a class in the hierarchy matching the provided {@code type}, {@code predicate}, and {@code function}.
    *
    * @param first the first class, used to start the search
    * @param function the function to find a result
@@ -68,5 +68,16 @@ public interface Types {
     }
 
     return null;
+  }
+
+  /**
+   * Checks if {@code a} and {@code b} are in the same package.
+   *
+   * @param a class a
+   * @param b class b
+   * @return {@code true} if {@code a} and {@code b} are in the same package
+   */
+  static boolean inSamePackage(final @NonNull Class<?> a, final @NonNull Class<?> b) {
+    return a.getPackage().equals(b.getPackage());
   }
 }

@@ -58,4 +58,31 @@ public interface Methods {
       return null;
     }
   }
+
+  /**
+   * Gets a declared method.
+   *
+   * @param klass the class to look in
+   * @param method the method to search for
+   * @return the found method
+   */
+  static @Nullable Method getDeclared(final @NonNull Class<?> klass, final @NonNull Method method) {
+    return getDeclared(klass, method.getName(), method.getParameterTypes());
+  }
+
+  /**
+   * Gets a declared method.
+   *
+   * @param klass the class to look in
+   * @param name the name of the method to search for
+   * @param parameterTypes the parameter types of the method to search for
+   * @return the found method
+   */
+  static @Nullable Method getDeclared(final @NonNull Class<?> klass, final @NonNull String name, final @Nullable Class<?>... parameterTypes) {
+    try {
+      return klass.getDeclaredMethod(name, parameterTypes);
+    } catch(final NoSuchMethodException e) {
+      return null;
+    }
+  }
 }

@@ -24,6 +24,7 @@
 package net.kyori.mu.reflect;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Retention;
@@ -56,11 +57,31 @@ class AnnotationsTest {
   }
 
   @Test
-  void testFindMethod() throws NoSuchMethodException {
+  void testFind_method_public() throws NoSuchMethodException {
     assertAnnotationValue("class=b,method=a", Annotations.find(B.class.getDeclaredMethod("a"), Foo.class));
     assertAnnotationValue("class=c,method=a", Annotations.find(C.class.getDeclaredMethod("a"), Foo.class));
     assertAnnotationValue("class=c,method=a", Annotations.find(D.class.getDeclaredMethod("a"), Foo.class));
-    assertNull(Annotations.find(D.class.getDeclaredMethod("b"), Foo.class));
+  }
+
+  @Test
+  void testFind_method_protected() throws NoSuchMethodException {
+    assertAnnotationValue("class=b,method=b", Annotations.find(B.class.getDeclaredMethod("b"), Foo.class));
+    assertAnnotationValue("class=b,method=b", Annotations.find(C.class.getDeclaredMethod("b"), Foo.class));
+    assertAnnotationValue("class=d,method=b", Annotations.find(D.class.getDeclaredMethod("b"), Foo.class));
+  }
+
+  @Test
+  void testFind_method_package() throws NoSuchMethodException {
+    assertAnnotationValue("class=b,method=c", Annotations.find(B.class.getDeclaredMethod("c"), Foo.class));
+    assertAnnotationValue("class=b,method=c", Annotations.find(C.class.getDeclaredMethod("c"), Foo.class));
+    assertAnnotationValue("class=d,method=c", Annotations.find(D.class.getDeclaredMethod("c"), Foo.class));
+  }
+
+  @Test
+  void testFind_method_private() throws NoSuchMethodException {
+    assertAnnotationValue("class=b,method=d", Annotations.find(B.class.getDeclaredMethod("d"), Foo.class));
+    assertNull(Annotations.find(C.class.getDeclaredMethod("d"), Foo.class));
+    assertAnnotationValue("class=d,method=d", Annotations.find(D.class.getDeclaredMethod("d"), Foo.class));
   }
 
   private static void assertAnnotationValue(final String string, final @Nullable Foo annotation) {
@@ -81,18 +102,25 @@ class AnnotationsTest {
     private String y;
     private @Foo("class=b,field=z") String z;
 
-    @Override
-    @Foo("class=b,method=a") public void a() {}
+    @Foo("class=b,method=a") @Override public void a() {}
+    @Foo("class=b,method=b") protected void b() {}
+    @Foo("class=b,method=c") void c() {}
+    @Foo("class=b,method=d") private void d() {}
   }
 
   private static class C extends B {
     @Foo("class=c,method=a") @Override public void a() {}
+    @Override protected void b() {}
+    @Override void c() {}
+    private void d() {}
   }
 
   @Foo("class=d")
   private static class D extends C {
     @Override public void a() {}
-    public void b() {}
+    @Foo("class=d,method=b") @Override protected void b() {}
+    @Foo("class=d,method=c") @Override void c() {}
+    @Foo("class=d,method=d") private void d() {}
   }
 
   @Retention(RetentionPolicy.RUNTIME) private @interface Foo { String value(); }
