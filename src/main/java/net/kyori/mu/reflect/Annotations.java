@@ -93,7 +93,7 @@ public interface Annotations {
       if(source == null) return null;
       // private and static methods cannot be an override
       if(Members.isPrivate(method) || Members.isStatic(method)) return null;
-      if(Members.isStatic(method) || Members.isStatic(source)) return null;
+      if(Members.isPrivate(source) || Members.isStatic(source)) return null;
       // source cannot be overridden if final
       if(Members.isFinal(source)) return null;
       // package-private methods can only be overridden from the same package
