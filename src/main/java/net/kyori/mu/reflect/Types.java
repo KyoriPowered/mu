@@ -58,7 +58,7 @@ public interface Types {
       }
 
       final /* @Nullable */ Class<?> parent = next.getSuperclass();
-      if(parent != null && parent != Object.class) {
+      if(parent != null) {
         classes.add((Class<? super T>) parent);
       }
 

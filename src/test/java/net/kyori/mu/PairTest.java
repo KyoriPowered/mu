@@ -23,12 +23,15 @@
  */
 package net.kyori.mu;
 
+import com.google.common.truth.StringSubject;
+import net.kyori.mu.examine.ExaminableProperty;
 import org.junit.jupiter.api.Test;
 
 import java.util.AbstractMap;
 import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PairTest {
@@ -96,6 +99,18 @@ class PairTest {
     pair = pair.rmap(left -> "thgir");
     assertEquals("left", pair.left());
     assertEquals("thgir", pair.right());
+  }
+
+  @Test
+  void testExaminableProperties() {
+    assertThat(Pair.of("abc", "def").examinableProperties().map(ExaminableProperty::name)).containsExactly("left", "right").inOrder();
+  }
+
+  @Test
+  void testToString() {
+    final StringSubject ss = assertThat(Pair.of("abc", "def").toString());
+    ss.contains("left=abc");
+    ss.contains("right=def");
   }
 
   @Test

@@ -89,7 +89,12 @@ public interface Annotations {
     return Types.find(declaringClass, type -> {
       // cannot search same class
       if(type == declaringClass) return null;
-      final Method source = Methods.getDeclared(type, method);
+      final Method source;
+      try {
+        source = type.getDeclaredMethod(method.getName(), method.getParameterTypes());
+      } catch(final NoSuchMethodException e) {
+        return null;
+      }
       if(source == null) return null;
       // private and static methods cannot be an override
       if(Members.isPrivate(method) || Members.isStatic(method)) return null;

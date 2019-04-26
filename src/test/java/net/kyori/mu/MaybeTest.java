@@ -23,6 +23,7 @@
  */
 package net.kyori.mu;
 
+import net.kyori.mu.examine.ExaminableProperty;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -192,6 +193,24 @@ class MaybeTest {
     assertEquals(Maybe.just("foo"), Maybe.first(Maybe.just("foo"), Maybe.just("bar")));
     assertEquals(Maybe.nothing(), Maybe.first(Arrays.asList(Maybe.nothing(), Maybe.nothing())));
     assertEquals(Maybe.just("foo"), Maybe.first(Arrays.asList(Maybe.just("foo"), Maybe.just("bar"))));
+  }
+
+  @Test
+  void testExaminableProperties() {
+    assertThat(Maybe.nothing().examinableProperties().map(ExaminableProperty::name)).isEmpty();
+    assertThat(Maybe.just("foo").examinableProperties().map(ExaminableProperty::name)).containsExactly("value").inOrder();
+  }
+
+  @Test
+  void testToString() {
+    assertThat(Maybe.nothing().toString()).isEqualTo("Maybe.nothing()");
+    assertThat(Maybe.just("abc").toString()).isEqualTo("Maybe.just(abc)");
+  }
+
+  @Test
+  void testHashCode() {
+    assertThat(Maybe.nothing().hashCode()).isEqualTo(Maybe.nothing().hashCode());
+    assertThat(Maybe.just("foo").hashCode()).isEqualTo(Maybe.just("foo").hashCode());
   }
 
   @SuppressWarnings("serial")

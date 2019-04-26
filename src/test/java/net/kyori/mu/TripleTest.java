@@ -23,9 +23,12 @@
  */
 package net.kyori.mu;
 
+import com.google.common.truth.StringSubject;
+import net.kyori.mu.examine.ExaminableProperty;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TripleTest {
@@ -115,6 +118,19 @@ class TripleTest {
     assertEquals("left", triple.left());
     assertEquals("middle", triple.middle());
     assertEquals("thgir", triple.right());
+  }
+
+  @Test
+  void testExaminableProperties() {
+    assertThat(Triple.of("abc", "def", "ghi").examinableProperties().map(ExaminableProperty::name)).containsExactly("left", "middle", "right").inOrder();
+  }
+
+  @Test
+  void testToString() {
+    final StringSubject ss = assertThat(Triple.of("abc", "def", "ghi").toString());
+    ss.contains("left=abc");
+    ss.contains("middle=def");
+    ss.contains("right=ghi");
   }
 
   @Test

@@ -1,5 +1,5 @@
 plugins {
-  id 'java'
+  id 'java-library'
   id 'maven'
   id 'signing'
   id 'net.minecrell.licenser' version '0.4'
@@ -33,11 +33,12 @@ repositories {
 }
 
 dependencies {
-  compile 'org.checkerframework:checker-qual:2.5.7'
-  testCompile 'com.google.truth:truth:0.42'
-  testCompile 'com.google.truth.extensions:truth-java8-extension:0.42'
-  testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-  testCompile 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+  api 'org.checkerframework:checker-qual:2.5.7'
+  testImplementation 'com.google.guava:guava-testlib:27.0.1-jre'
+  testImplementation 'com.google.truth:truth:0.42'
+  testImplementation 'com.google.truth.extensions:truth-java8-extension:0.42'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+  testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
 task javadocJar(type: Jar) {

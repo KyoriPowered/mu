@@ -25,6 +25,7 @@ package net.kyori.mu.collection;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -38,7 +39,36 @@ import java.util.function.Supplier;
  */
 public interface MuMaps {
   /**
+   * Computes the value of {@code key} via {@code function} if {@code map} does not have a mapping.
+   *
+   * <p>This avoids using {@link Map#computeIfAbsent(Object, Function)} directly to allow using {@code map} inside of {@code function} - some map
+   * implementations will throw a {@link ConcurrentModificationException} when modifying the map within {@code function}.</p>
+   *
+   * @param map the map
+   * @param key the key
+   * @param function the value supplier
+   * @param <K> the key type
+   * @param <V> the value type
+   * @return the value
+   * @see Map#computeIfAbsent(Object, Function)
+   */
+  static <K, V> /* @Nullable */ V computeIfAbsent(final @NonNull Map<K, V> map, final /* @Nullable */ K key, final @NonNull Function<K, V> function) {
+    V value = map.get(key);
+    if(value == null) {
+      value = function.apply(key);
+      if(value != null) {
+        map.put(key, value);
+        return value;
+      }
+    }
+    return value;
+  }
+
+  /**
    * Computes the value of {@code key} via {@code supplier} if {@code map} does not have a mapping.
+   *
+   * <p>This avoids using {@link Map#computeIfAbsent(Object, Function)} to allow using {@code map} inside of {@code function} - some map
+   * implementations will throw a {@link ConcurrentModificationException} when modifying the map within {@code function}.</p>
    *
    * @param map the map
    * @param key the key
@@ -49,6 +79,14 @@ public interface MuMaps {
    * @see Map#computeIfAbsent(Object, Function)
    */
   static <K, V> /* @Nullable */ V computeIfAbsent(final @NonNull Map<K, V> map, final /* @Nullable */ K key, final @NonNull Supplier<V> supplier) {
-    return map.computeIfAbsent(key, key0 -> supplier.get());
+    V value = map.get(key);
+    if(value == null) {
+      value = supplier.get();
+      if(value != null) {
+        map.put(key, value);
+        return value;
+      }
+    }
+    return value;
   }
 }

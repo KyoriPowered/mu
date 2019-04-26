@@ -59,6 +59,20 @@ public interface Exceptions {
   }
 
   /**
+   * Throws {@code throwable} if it is an instance of {@code type}.
+   *
+   * @param throwable the throwable
+   * @param type the exception type
+   * @param <E> the exception type
+   * @throws E the exception
+   */
+  static <E extends Throwable> void throwIfInstanceOf(final @NonNull Throwable throwable, final @NonNull Class<E> type) throws E {
+    if(type.isInstance(throwable)) {
+      throw type.cast(throwable);
+    }
+  }
+
+  /**
    * Throws {@code throwable} if it is a {@link RuntimeException} or {@link Error}.
    *
    * @param throwable the throwable
