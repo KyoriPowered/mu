@@ -23,6 +23,10 @@
  */
 package net.kyori.mu.math;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Random;
+
 /**
  * 2 plus 2 equals 5... right?
  */
@@ -84,5 +88,169 @@ public final class MuMath {
     if(value < min) return min;
     if(value > max) return max;
     return value;
+  }
+
+  /**
+   * Checks if {@code value} is greater than or equal to {@code min} and less than or equal to {@code max}.
+   *
+   * @param value the value
+   * @param min the min value, inclusive
+   * @param max the max value, inclusive
+   * @return {@code true} if between {@code min} and {@code max}, {@code false} otherwise
+   */
+  public static boolean isBetween(final double value, final double min, final double max) {
+    return value >= min && value <= max;
+  }
+
+  /**
+   * Checks if {@code value} is greater than or equal to {@code min} and less than or equal to {@code max}.
+   *
+   * @param value the value
+   * @param min the min value, inclusive
+   * @param max the max value, inclusive
+   * @return {@code true} if between {@code min} and {@code max}, {@code false} otherwise
+   */
+  public static boolean isBetween(final float value, final float min, final float max) {
+    return value >= min && value <= max;
+  }
+
+  /**
+   * Checks if {@code value} is greater than or equal to {@code min} and less than or equal to {@code max}.
+   *
+   * @param value the value
+   * @param min the min value, inclusive
+   * @param max the max value, inclusive
+   * @return {@code true} if between {@code min} and {@code max}, {@code false} otherwise
+   */
+  public static boolean isBetween(final int value, final int min, final int max) {
+    return value >= min && value <= max;
+  }
+
+  /**
+   * Checks if {@code value} is greater than or equal to {@code min} and less than or equal to {@code max}.
+   *
+   * @param value the value
+   * @param min the min value, inclusive
+   * @param max the max value, inclusive
+   * @return {@code true} if between {@code min} and {@code max}, {@code false} otherwise
+   */
+  public static boolean isBetween(final long value, final long min, final long max) {
+    return value >= min && value <= max;
+  }
+
+  /**
+   * Linearly interpolates between {@code a} and {@code b} by {@code t}.
+   *
+   * @param t interpolation value
+   * @param a lower bound
+   * @param b upper bound
+   * @return the interpolated value
+   */
+  public static double lerp(final double t, final double a, final double b) {
+    return a + t * (b - a);
+  }
+
+  /**
+   * Linearly interpolates between {@code a} and {@code b} by {@code t}.
+   *
+   * @param t interpolation value
+   * @param a lower bound
+   * @param b upper bound
+   * @return the interpolated value
+   */
+  public static float lerp(final float t, final float a, final float b) {
+    return a + t * (b - a);
+  }
+
+  /**
+   * Gets the minimum value from an array of values.
+   *
+   * @param values the values
+   * @return the minimum value
+   */
+  public static double min(final double... values) {
+    double value = Double.POSITIVE_INFINITY;
+    for(int i = 0, length = values.length; i < length; i++) {
+      value = Math.min(value, values[i]);
+    }
+    return value;
+  }
+
+  /**
+   * Gets the minimum value from an array of values.
+   *
+   * @param values the values
+   * @return the minimum value
+   */
+  public static float min(final float... values) {
+    float value = Float.POSITIVE_INFINITY;
+    for(int i = 0, length = values.length; i < length; i++) {
+      value = Math.min(value, values[i]);
+    }
+    return value;
+  }
+
+  /**
+   * Gets the maximum value from an array of values.
+   *
+   * @param values the values
+   * @return the maximum value
+   */
+  public static double max(final double... values) {
+    double value = Double.NEGATIVE_INFINITY;
+    for(int i = 0, length = values.length; i < length; i++) {
+      value = Math.max(value, values[i]);
+    }
+    return value;
+  }
+
+  /**
+   * Gets the maximum value from an array of values.
+   *
+   * @param values the values
+   * @return the maximum value
+   */
+  public static double max(final float... values) {
+    float value = Float.NEGATIVE_INFINITY;
+    for(int i = 0, length = values.length; i < length; i++) {
+      value = Math.max(value, values[i]);
+    }
+    return value;
+  }
+
+  /**
+   * Gets a random value between {@code min} and {@code max}.
+   *
+   * @param random the random source
+   * @param min the minimum value
+   * @param max the maximum value
+   * @return a value
+   */
+  public static double random(final @NonNull Random random, final double min, final double max) {
+    return random.nextDouble() * (max - min) + min;
+  }
+
+  /**
+   * Gets a random value between {@code min} and {@code max}.
+   *
+   * @param random the random source
+   * @param min the minimum value
+   * @param max the maximum value
+   * @return a value
+   */
+  public static float random(final @NonNull Random random, final float min, final float max) {
+    return random.nextFloat() * (max - min) + min;
+  }
+
+  /**
+   * Gets a random value between {@code min} and {@code max}.
+   *
+   * @param random the random source
+   * @param min the minimum value
+   * @param max the maximum value
+   * @return a value
+   */
+  public static int random(final @NonNull Random random, final int min, final int max) {
+    return random.nextInt(max - min + 1) + min;
   }
 }

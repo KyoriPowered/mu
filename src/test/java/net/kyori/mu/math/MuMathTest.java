@@ -25,7 +25,12 @@ package net.kyori.mu.math;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MuMathTest {
   @Test
@@ -62,5 +67,187 @@ class MuMathTest {
     assertEquals(5L, MuMath.clamp(7L, -3L, 5L));
     assertEquals(0L, MuMath.clamp(-10L, 0L, 100L));
     assertEquals(100L, MuMath.clamp(101L, 0L, 100L));
+  }
+
+  @Test
+  void testIsBetween_double() {
+    assertFalse(MuMath.isBetween(0d, 0.5d, 3.5d));
+    assertFalse(MuMath.isBetween(0d, 1d, 3d));
+    assertTrue(MuMath.isBetween(0.5d, 0.5d, 3.5d));
+    assertTrue(MuMath.isBetween(1d, 1d, 3d));
+    assertTrue(MuMath.isBetween(2d, 1d, 3d));
+    assertTrue(MuMath.isBetween(3d, 1d, 3d));
+    assertTrue(MuMath.isBetween(3.5d, 0.5d, 3.5d));
+    assertFalse(MuMath.isBetween(4d, 1d, 3d));
+  }
+
+  @Test
+  void testIsBetween_float() {
+    assertFalse(MuMath.isBetween(0f, 0.5f, 3.5f));
+    assertFalse(MuMath.isBetween(0f, 1f, 3f));
+    assertTrue(MuMath.isBetween(0.5f, 0.5f, 3.5f));
+    assertTrue(MuMath.isBetween(1f, 1f, 3f));
+    assertTrue(MuMath.isBetween(2f, 1f, 3f));
+    assertTrue(MuMath.isBetween(3f, 1f, 3f));
+    assertTrue(MuMath.isBetween(3.5f, 0.5f, 3.5f));
+    assertFalse(MuMath.isBetween(4f, 1f, 3f));
+  }
+
+  @Test
+  void testIsBetween_int() {
+    assertFalse(MuMath.isBetween(0, 1, 3));
+    assertTrue(MuMath.isBetween(1, 1, 3));
+    assertTrue(MuMath.isBetween(2, 1, 3));
+    assertTrue(MuMath.isBetween(3, 1, 3));
+    assertFalse(MuMath.isBetween(4, 1, 3));
+  }
+
+  @Test
+  void testIsBetween_long() {
+    assertFalse(MuMath.isBetween(0L, 1L, 3L));
+    assertTrue(MuMath.isBetween(1L, 1L, 3L));
+    assertTrue(MuMath.isBetween(2L, 1L, 3L));
+    assertTrue(MuMath.isBetween(3L, 1L, 3L));
+    assertFalse(MuMath.isBetween(4L, 1L, 3L));
+  }
+
+  @Test
+  void testLerp_double() {
+    assertEquals(0d, MuMath.lerp(0d, 0d, 1d));
+    assertEquals(0d, MuMath.lerp(0.25d, -10d, 30d));
+    assertEquals(-0.5d, MuMath.lerp(0.5d, 0d, -1d));
+    assertEquals(0.5d, MuMath.lerp(0.5d, 0d, 1d));
+    assertEquals(-1d, MuMath.lerp(1d, 0d, -1d));
+    assertEquals(1d, MuMath.lerp(1d, 0d, 1d));
+    assertEquals(5d, MuMath.lerp(0.5d, 0d, 10d));
+    assertEquals(17d, MuMath.lerp(0.7d, 10d, 20d));
+    assertEquals(-10d, MuMath.lerp(0d, -10d, 30d));
+    assertEquals(10d, MuMath.lerp(0.50d, -10d, 30d));
+    assertEquals(20d, MuMath.lerp(0.75d, -10d, 30d));
+    assertEquals(30d, MuMath.lerp(1d, -10d, 30d));
+    assertEquals(50d, MuMath.lerp(0.5d, 0d, 100d));
+  }
+
+  @Test
+  void testLerp_float() {
+    assertEquals(0f, MuMath.lerp(0f, 0f, 1f));
+    assertEquals(0f, MuMath.lerp(0.25f, -10f, 30f));
+    assertEquals(-0.5f, MuMath.lerp(0.5f, 0f, -1f));
+    assertEquals(0.5f, MuMath.lerp(0.5f, 0f, 1f));
+    assertEquals(-1f, MuMath.lerp(1f, 0f, -1f));
+    assertEquals(1f, MuMath.lerp(1f, 0f, 1f));
+    assertEquals(5f, MuMath.lerp(0.5f, 0f, 10f));
+    assertEquals(17f, MuMath.lerp(0.7f, 10f, 20f));
+    assertEquals(-10f, MuMath.lerp(0f, -10f, 30f));
+    assertEquals(10f, MuMath.lerp(0.50f, -10f, 30f));
+    assertEquals(20f, MuMath.lerp(0.75f, -10f, 30f));
+    assertEquals(30f, MuMath.lerp(1f, -10f, 30f));
+    assertEquals(50f, MuMath.lerp(0.5f, 0f, 100f));
+  }
+
+  @Test
+  void testMin_double_0() {
+    assertEquals(Double.POSITIVE_INFINITY, MuMath.min(new double[0]));
+  }
+
+  @Test
+  void testMin_double_1() {
+    assertEquals(-1d, MuMath.min(-1d));
+    assertEquals(1d, MuMath.min(1d));
+  }
+
+  @Test
+  void testMin_double_n() {
+    assertEquals(-1.73d, MuMath.min(3.2d, 2.2d, 4.5d, -1.73d, 2.3d));
+    assertEquals(2.2d, MuMath.min(3.2d, 2.2d, 4.5d, 2.3d));
+  }
+
+  @Test
+  @SuppressWarnings("RedundantArrayCreation")
+  void testMin_float_0() {
+    assertEquals(Float.POSITIVE_INFINITY, MuMath.min(new float[0]));
+  }
+
+  @Test
+  void testMin_float_1() {
+    assertEquals(-1f, MuMath.min(-1f));
+    assertEquals(1f, MuMath.min(1f));
+  }
+
+  @Test
+  void testMin_float_n() {
+    assertEquals(-1.73f, MuMath.min(3.2f, 2.2f, 4.5f, -1.73f, 2.3f));
+    assertEquals(2.2f, MuMath.min(3.2f, 2.2f, 4.5f, 2.3f));
+  }
+
+  @Test
+  void testMax_double_0() {
+    assertEquals(Double.NEGATIVE_INFINITY, MuMath.max(new double[0]));
+  }
+
+  @Test
+  void testMax_double_1() {
+    assertEquals(-1d, MuMath.max(-1d));
+    assertEquals(1d, MuMath.max(1d));
+  }
+
+  @Test
+  @SuppressWarnings("RedundantArrayCreation")
+  void testMax_float_0() {
+    assertEquals(Float.NEGATIVE_INFINITY, MuMath.max(new float[0]));
+  }
+
+  @Test
+  void testMax_double_n() {
+    assertEquals(-1.8d, MuMath.max(-3.2d, -2.2d, -1.8d, -2.3d));
+    assertEquals(4.5d, MuMath.max(3.2d, 2.2d, 4.5d, 2.3d));
+  }
+
+  @Test
+  void testMax_float_1() {
+    assertEquals(-1f, MuMath.max(-1f));
+    assertEquals(1f, MuMath.max(1f));
+  }
+
+  @Test
+  void testMax_float_n() {
+    assertEquals(-1.8f, MuMath.max(-3.2f, -2.2f, -1.8f, -2.3f));
+    assertEquals(4.5f, MuMath.max(3.2f, 2.2f, 4.5f, 2.3f));
+  }
+
+  @Test
+  void testRandom_double() {
+    final Random random = ThreadLocalRandom.current();
+    final float min = 1.3f;
+    final float max = 4.5f;
+    for(int i = 0; i < 10; i++) {
+      final float value = MuMath.random(random, min, max);
+      assertTrue(value >= min);
+      assertTrue(value <= max);
+    }
+  }
+
+  @Test
+  void testRandom_float() {
+    final Random random = ThreadLocalRandom.current();
+    final double min = 1.3d;
+    final double max = 4.5d;
+    for(int i = 0; i < 10; i++) {
+      final double value = MuMath.random(random, min, max);
+      assertTrue(value >= min);
+      assertTrue(value <= max);
+    }
+  }
+
+  @Test
+  void testRandom_int() {
+    final Random random = ThreadLocalRandom.current();
+    final int min = 1;
+    final int max = 4;
+    for(int i = 0; i < 10; i++) {
+      final int value = MuMath.random(random, min, max);
+      assertTrue(value >= min);
+      assertTrue(value <= max);
+    }
   }
 }
