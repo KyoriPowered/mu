@@ -48,7 +48,7 @@ class ExceptionsTest {
 
   @Test
   void testThrowIfInstanceOf() {
-    assertDoesNotThrow(() -> Exceptions.throwIfInstanceOf(new IllegalStateException(""), IllegalArgumentException.class));
+    assertDoesNotThrow(() -> Exceptions.<IllegalArgumentException>throwIfInstanceOf(new IllegalStateException(""), IllegalArgumentException.class));
     assertThrows(IllegalArgumentException.class, () -> Exceptions.throwIfInstanceOf(new IllegalArgumentException(""), IllegalArgumentException.class));
   }
 
