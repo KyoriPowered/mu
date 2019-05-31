@@ -1,24 +1,19 @@
 plugins {
   id 'java-library'
-  id 'maven'
+  id 'maven-publish'
   id 'signing'
+  id 'net.kyori.invent' version '1.0.4'
+  id 'net.kyori.invent-javadoc-jar' version '1.0.4'
+  id 'net.kyori.invent-sonatype-repository' version '1.0.4'
+  id 'net.kyori.invent-sources-jar' version '1.0.4'
   id 'net.minecrell.licenser' version '0.4'
 }
 
 group 'net.kyori'
 version '1.0.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 tasks.withType(JavaCompile) {
-  options.compilerArgs += ['-Xlint:all', '-Xlint:-path', '-parameters']
-  options.deprecation = true
-  options.encoding = 'UTF-8'
-}
-
-test {
-  useJUnitPlatform()
+  options.compilerArgs += ['-Xlint:all']
 }
 
 license {
@@ -41,78 +36,54 @@ dependencies {
   testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
-task javadocJar(type: Jar) {
-  classifier 'javadoc'
-  from javadoc
-}
-
-task sourcesJar(type: Jar) {
-  classifier 'sources'
-  from sourceSets.main.allSource
-}
-
-artifacts {
-  archives javadocJar
-  archives sourcesJar
-}
-
-signing {
-  required { !project.version.endsWith('-SNAPSHOT') && gradle.taskGraph.hasTask(':uploadArchives') && project.hasProperty('signing.keyId') }
-  sign configurations.archives
-}
-
 jar {
   manifest.attributes(
     'Automatic-Module-Name': 'net.kyori.mu'
   )
 }
 
-if(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
-  uploadArchives {
-    enabled = System.getenv('TRAVIS') == null || project.version.endsWith('-SNAPSHOT')
+inventSonatypeRepository.enabled = System.getenv('TRAVIS') == null || project.version.endsWith('-SNAPSHOT')
 
-    repositories {
-      mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from components.java
 
-        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-          authentication(userName: sonatypeUsername, password: sonatypePassword)
+      artifact javadocJar
+      artifact sourcesJar
+
+      pom {
+        name = project.name
+        description = project.description
+
+        developers {
+          developer {
+            id = 'kashike'
+          }
         }
 
-        snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-          authentication(userName: sonatypeUsername, password: sonatypePassword)
+        issueManagement {
+          system = 'GitHub Issues'
+          url = 'https://github.com/KyoriPowered/mu/issues'
         }
 
-        pom.project {
-          description 'A collection of utilities.'
-          name project.name
-          url 'https://github.com/KyoriPowered/mu/'
-
-          developers {
-            developer {
-              name 'kashike'
-            }
+        licenses {
+          license {
+            name = 'MIT License'
+            url = 'https://opensource.org/licenses/MIT'
           }
+        }
 
-          issueManagement {
-            system 'GitHub Issues'
-            url 'https://github.com/KyoriPowered/mu/issues'
-          }
-
-          licenses {
-            license {
-              name 'MIT License'
-              url 'https://opensource.org/licenses/MIT'
-            }
-          }
-
-          scm {
-            connection 'scm:git@github.com:KyoriPowered/mu.git'
-            developerConnection 'scm:git@github.com:KyoriPowered/mu.git'
-            url 'https://github.com/KyoriPowered/mu/'
-          }
+        scm {
+          connection = 'scm:git@github.com:KyoriPowered/mu.git'
+          developerConnection = 'scm:git@github.com:KyoriPowered/mu.git'
+          url = 'https://github.com/KyoriPowered/mu/'
         }
       }
     }
   }
+}
+
+signing {
+  sign publishing.publications.maven
 }
