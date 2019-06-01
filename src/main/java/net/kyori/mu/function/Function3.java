@@ -21,40 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.examine;
+package net.kyori.mu.function;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.stream.Stream;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
- * Something that can be examined.
+ * Represents a function that accepts three arguments and produces a result.
+ *
+ * @param <A> the type of the first argument to the function
+ * @param <B> the type of the second argument to the function
+ * @param <C> the type of the third argument to the function
+ * @param <Z> the type of the result of the function
+ * @see Function
+ * @see BiFunction
  */
-public interface Examinable {
+@FunctionalInterface
+public interface Function3<A, B, C, Z> {
   /**
-   * Examines.
+   * Applies this function to the given argument.
    *
-   * @param examiner the examiner
-   * @param <R> the result type
-   * @return the examination result
+   * @param a the first function argument
+   * @param b the second function argument
+   * @param c the third function argument
+   * @return the function result
    */
-  default <R> @NonNull R examine(final @NonNull Examiner<R> examiner) {
-    return examiner.examine(this);
-  }
-
-  /**
-   * Gets the examinable name.
-   *
-   * @return the examinable name
-   */
-  default @NonNull String examinableName() {
-    return this.getClass().getSimpleName();
-  }
-
-  /**
-   * Gets a stream of examinable properties.
-   *
-   * @return a stream of examinable properties
-   */
-  @NonNull Stream<? extends ExaminableProperty> examinableProperties();
+  Z apply(final A a, final B b, final C c);
 }

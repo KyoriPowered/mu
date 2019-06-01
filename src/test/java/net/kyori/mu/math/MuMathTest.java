@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.math;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -70,45 +69,45 @@ class MuMathTest {
   }
 
   @Test
-  void testIsBetween_double() {
-    assertFalse(MuMath.isBetween(0d, 0.5d, 3.5d));
-    assertFalse(MuMath.isBetween(0d, 1d, 3d));
-    assertTrue(MuMath.isBetween(0.5d, 0.5d, 3.5d));
-    assertTrue(MuMath.isBetween(1d, 1d, 3d));
-    assertTrue(MuMath.isBetween(2d, 1d, 3d));
-    assertTrue(MuMath.isBetween(3d, 1d, 3d));
-    assertTrue(MuMath.isBetween(3.5d, 0.5d, 3.5d));
-    assertFalse(MuMath.isBetween(4d, 1d, 3d));
+  void testBetween_double() {
+    assertFalse(MuMath.between(0d, 0.5d, 3.5d));
+    assertFalse(MuMath.between(0d, 1d, 3d));
+    assertTrue(MuMath.between(0.5d, 0.5d, 3.5d));
+    assertTrue(MuMath.between(1d, 1d, 3d));
+    assertTrue(MuMath.between(2d, 1d, 3d));
+    assertTrue(MuMath.between(3d, 1d, 3d));
+    assertTrue(MuMath.between(3.5d, 0.5d, 3.5d));
+    assertFalse(MuMath.between(4d, 1d, 3d));
   }
 
   @Test
-  void testIsBetween_float() {
-    assertFalse(MuMath.isBetween(0f, 0.5f, 3.5f));
-    assertFalse(MuMath.isBetween(0f, 1f, 3f));
-    assertTrue(MuMath.isBetween(0.5f, 0.5f, 3.5f));
-    assertTrue(MuMath.isBetween(1f, 1f, 3f));
-    assertTrue(MuMath.isBetween(2f, 1f, 3f));
-    assertTrue(MuMath.isBetween(3f, 1f, 3f));
-    assertTrue(MuMath.isBetween(3.5f, 0.5f, 3.5f));
-    assertFalse(MuMath.isBetween(4f, 1f, 3f));
+  void testBetween_float() {
+    assertFalse(MuMath.between(0f, 0.5f, 3.5f));
+    assertFalse(MuMath.between(0f, 1f, 3f));
+    assertTrue(MuMath.between(0.5f, 0.5f, 3.5f));
+    assertTrue(MuMath.between(1f, 1f, 3f));
+    assertTrue(MuMath.between(2f, 1f, 3f));
+    assertTrue(MuMath.between(3f, 1f, 3f));
+    assertTrue(MuMath.between(3.5f, 0.5f, 3.5f));
+    assertFalse(MuMath.between(4f, 1f, 3f));
   }
 
   @Test
-  void testIsBetween_int() {
-    assertFalse(MuMath.isBetween(0, 1, 3));
-    assertTrue(MuMath.isBetween(1, 1, 3));
-    assertTrue(MuMath.isBetween(2, 1, 3));
-    assertTrue(MuMath.isBetween(3, 1, 3));
-    assertFalse(MuMath.isBetween(4, 1, 3));
+  void testBetween_int() {
+    assertFalse(MuMath.between(0, 1, 3));
+    assertTrue(MuMath.between(1, 1, 3));
+    assertTrue(MuMath.between(2, 1, 3));
+    assertTrue(MuMath.between(3, 1, 3));
+    assertFalse(MuMath.between(4, 1, 3));
   }
 
   @Test
-  void testIsBetween_long() {
-    assertFalse(MuMath.isBetween(0L, 1L, 3L));
-    assertTrue(MuMath.isBetween(1L, 1L, 3L));
-    assertTrue(MuMath.isBetween(2L, 1L, 3L));
-    assertTrue(MuMath.isBetween(3L, 1L, 3L));
-    assertFalse(MuMath.isBetween(4L, 1L, 3L));
+  void testBetween_long() {
+    assertFalse(MuMath.between(0L, 1L, 3L));
+    assertTrue(MuMath.between(1L, 1L, 3L));
+    assertTrue(MuMath.between(2L, 1L, 3L));
+    assertTrue(MuMath.between(3L, 1L, 3L));
+    assertFalse(MuMath.between(4L, 1L, 3L));
   }
 
   @Test

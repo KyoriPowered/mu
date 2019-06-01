@@ -23,9 +23,8 @@
  */
 package net.kyori.mu.function;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.function.Predicate;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /*
  * Name is prefixed with 'Mu' to avoid conflict with com.google.common.base.Predicates

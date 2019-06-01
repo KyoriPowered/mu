@@ -23,12 +23,11 @@
  */
 package net.kyori.mu.collection;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /*
  * Name is prefixed with 'Mu' to avoid conflict with com.google.common.collect.Maps

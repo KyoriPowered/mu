@@ -23,11 +23,10 @@
  */
 package net.kyori.mu.collection;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A loading map.

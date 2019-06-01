@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.Consumer;
 import net.kyori.mu.exception.Exceptions;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.function.Consumer;
 
 /**
  * A {@link Consumer} that allows for throwing checked exceptions.
@@ -46,24 +45,6 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
    */
   static <T, E extends Throwable> @NonNull ThrowingConsumer<T, E> of(final @NonNull ThrowingConsumer<T, E> consumer) {
     return consumer;
-  }
-
-  /**
-   * Returns a consumer which will unwrap and rethrow any throwables caught in {@code consumer}.
-   *
-   * @param consumer the consumer
-   * @param <T> the input type
-   * @param <E> the exception type
-   * @return a consumer
-   */
-  static <T, E extends Throwable> @NonNull ThrowingConsumer<T, E> unwrapping(final @NonNull ThrowingConsumer<T, E> consumer) {
-    return input -> {
-      try {
-        consumer.throwingAccept(input);
-      } catch(final Throwable t) {
-        throw Exceptions.rethrow(Exceptions.unwrap(t));
-      }
-    };
   }
 
   /**

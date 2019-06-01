@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.Predicate;
 import net.kyori.mu.exception.Exceptions;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.function.Predicate;
 
 /**
  * A {@link Predicate} that allows for throwing checked exceptions.
@@ -46,24 +45,6 @@ public interface ThrowingPredicate<T, E extends Throwable> extends Predicate<T> 
    */
   static <T, E extends Throwable> @NonNull ThrowingPredicate<T, E> of(final @NonNull ThrowingPredicate<T, E> predicate) {
     return predicate;
-  }
-
-  /**
-   * Returns a predicate which will unwrap and rethrow any throwables caught in {@code predicate}.
-   *
-   * @param predicate the predicate
-   * @param <T> the input type
-   * @param <E> the exception type
-   * @return a predicate
-   */
-  static <T, E extends Throwable> @NonNull ThrowingPredicate<T, E> unwrapping(final @NonNull ThrowingPredicate<T, E> predicate) {
-    return input -> {
-      try {
-        return predicate.throwingTest(input);
-      } catch(final Throwable t) {
-        throw Exceptions.rethrow(Exceptions.unwrap(t));
-      }
-    };
   }
 
   /**

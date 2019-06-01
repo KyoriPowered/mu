@@ -23,11 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.BiConsumer;
 import net.kyori.mu.TestException;
 import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.BiConsumer;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -35,11 +33,6 @@ class ThrowingBiConsumerTest {
   @Test
   void testOf() {
     assertThrows(TestException.class, () -> accept(ThrowingBiConsumer.of((a, b) -> { throw new TestException(); })));
-  }
-
-  @Test
-  void testUnwrapping() {
-    assertThrows(TestException.class, () -> accept(ThrowingBiConsumer.unwrapping((a, b) -> { throw new InvocationTargetException(new TestException()); })));
   }
 
   private static void accept(final BiConsumer<String, String> consumer) { consumer.accept("kitten", "kitty"); }

@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.collection;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Map;
 import java.util.function.Function;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /* package */ final class LoadingMapImpl<K, V> extends ForwardingMap.Impl<K, V> implements LoadingMap<K, V> {
   private final Map<K, V> map;
@@ -49,6 +48,6 @@ import java.util.function.Function;
     if(value != null) {
       return value;
     }
-    return this.map.computeIfAbsent((K) key, this.function);
+    return MuMaps.computeIfAbsent(this.map, (K) key, this.function);
   }
 }

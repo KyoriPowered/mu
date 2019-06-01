@@ -23,11 +23,10 @@
  */
 package net.kyori.mu;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A collection of utilities for composing objects.

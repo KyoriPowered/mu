@@ -23,9 +23,8 @@
  */
 package net.kyori.mu.concurrent;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.concurrent.CompletableFuture;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A collection of methods for working with completable futures.

@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.BiFunction;
 import net.kyori.mu.exception.Exceptions;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.function.BiFunction;
 
 /**
  * A {@link BiFunction} that allows for throwing checked exceptions.
@@ -50,26 +49,6 @@ public interface ThrowingBiFunction<T, U, R, E extends Throwable> extends BiFunc
    */
   static <T, U, R, E extends Throwable> @NonNull ThrowingBiFunction<T, U, R, E> of(final @NonNull ThrowingBiFunction<T, U, R, E> function) {
     return function;
-  }
-
-  /**
-   * Returns a function which will unwrap and rethrow any throwables caught in {@code function}.
-   *
-   * @param function the function
-   * @param <T> the first input type
-   * @param <U> the second input type
-   * @param <R> the output type
-   * @param <E> the exception type
-   * @return a bi-function
-   */
-  static <T, U, R, E extends Throwable> @NonNull ThrowingBiFunction<T, U, R, E> unwrapping(final @NonNull ThrowingBiFunction<T, U, R, E> function) {
-    return (first, second) -> {
-      try {
-        return function.throwingApply(first, second);
-      } catch(final Throwable t) {
-        throw Exceptions.rethrow(Exceptions.unwrap(t));
-      }
-    };
   }
 
   /**

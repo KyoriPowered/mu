@@ -23,15 +23,8 @@
  */
 package net.kyori.mu;
 
-import net.kyori.mu.collection.MuIterators;
-import net.kyori.mu.examine.Examinable;
-import net.kyori.mu.examine.ExaminableProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -41,6 +34,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.kyori.mu.collection.MuIterators;
+import net.kyori.mu.examination.Examinable;
+import net.kyori.mu.examination.ExaminableProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -120,14 +118,6 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
    * @return {@code true} if this {@code Maybe} has a value
    */
   boolean isJust();
-
-  /**
-   * Gets the value if present, otherwise throws.
-   *
-   * @return the value
-   * @throws NoSuchElementException if no value is present
-   */
-  T get();
 
   /**
    * Gets the value if present, otherwise returns {@code defaultValue}.
@@ -308,11 +298,6 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     }
 
     @Override
-    public T get() {
-      throw new NoSuchElementException();
-    }
-
-    @Override
     public T orDefault(final @Nullable T defaultValue) {
       return defaultValue;
     }
@@ -426,11 +411,6 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     @Override
     public boolean isJust() {
       return true;
-    }
-
-    @Override
-    public T get() {
-      return this.value;
     }
 
     @Override

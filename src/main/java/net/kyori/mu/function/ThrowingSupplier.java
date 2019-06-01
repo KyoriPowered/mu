@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.Supplier;
 import net.kyori.mu.exception.Exceptions;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.function.Supplier;
 
 /**
  * A {@link Supplier} that allows for throwing checked exceptions.
@@ -46,24 +45,6 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
    */
   static <T, E extends Throwable> @NonNull ThrowingSupplier<T, E> of(final @NonNull ThrowingSupplier<T, E> supplier) {
     return supplier;
-  }
-
-  /**
-   * Returns a supplier which will unwrap and rethrow any throwables caught in {@code supplier}.
-   *
-   * @param supplier the supplier
-   * @param <T> the output type
-   * @param <E> the exception type
-   * @return a supplier
-   */
-  static <T, E extends Throwable> @NonNull ThrowingSupplier<T, E> unwrapping(final @NonNull ThrowingSupplier<T, E> supplier) {
-    return () -> {
-      try {
-        return supplier.throwingGet();
-      } catch(final Throwable t) {
-        throw Exceptions.rethrow(Exceptions.unwrap(t));
-      }
-    };
   }
 
   /**

@@ -21,16 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.examine;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+package net.kyori.mu.examination;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Stream;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * An abstract implementation of an examiner.

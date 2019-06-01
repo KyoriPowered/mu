@@ -21,22 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.examine;
+package net.kyori.mu.examination;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * An examiner.
- *
- * @param <R> the result type
+ * An examinable property.
  */
-public interface Examiner<R> {
+public interface ExaminableProperty {
   /**
-   * Examines.
+   * Gets the name.
    *
-   * @param value the value to examine
-   * @return the result
+   * @return the name
    */
-  @NonNull R examine(final @Nullable Object value);
+  @NonNull String name();
+
+  /**
+   * Gets the value.
+   *
+   * @return the value
+   */
+  @Nullable Object value();
+
+  /**
+   * Creates a property.
+   *
+   * @param name the name
+   * @param value the value
+   * @return the property
+   */
+  static @NonNull ExaminableProperty of(final @NonNull String name, final @Nullable Object value) {
+    return new ExaminableProperty() {
+      @Override
+      public @NonNull String name() {
+        return name;
+      }
+
+      @Override
+      public @Nullable Object value() {
+        return value;
+      }
+    };
+  }
 }

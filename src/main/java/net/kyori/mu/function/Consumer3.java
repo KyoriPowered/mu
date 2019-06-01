@@ -21,47 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.examine;
+package net.kyori.mu.function;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
- * An examinable property.
+ * Represents an operation that accepts three input arguments and returns no result.
+ *
+ * @param <A> the type of the first input argument
+ * @param <B> the type of the first second argument
+ * @param <C> the type of the third input argument
+ * @see Consumer
+ * @see BiConsumer
  */
-public interface ExaminableProperty {
+@FunctionalInterface
+public interface Consumer3<A, B, C> {
   /**
-   * Gets the name.
+   * Performs this operation on the given arguments.
    *
-   * @return the name
+   * @param a the first input argument
+   * @param b the second input argument
+   * @param c the third input argument
    */
-  @NonNull String name();
-
-  /**
-   * Gets the value.
-   *
-   * @return the value
-   */
-  @Nullable Object value();
-
-  /**
-   * Creates a property.
-   *
-   * @param name the name
-   * @param value the value
-   * @return the property
-   */
-  static @NonNull ExaminableProperty of(final @NonNull String name, final @Nullable Object value) {
-    return new ExaminableProperty() {
-      @Override
-      public @NonNull String name() {
-        return name;
-      }
-
-      @Override
-      public @Nullable Object value() {
-        return value;
-      }
-    };
-  }
+  void accept(final A a, final B b, final C c);
 }

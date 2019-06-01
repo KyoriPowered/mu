@@ -23,14 +23,12 @@
  */
 package net.kyori.mu;
 
-import net.kyori.mu.examine.ExaminableProperty;
-import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
+import net.kyori.mu.examination.ExaminableProperty;
+import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
@@ -75,12 +73,6 @@ class MaybeTest {
   }
 
   @Test
-  void testGet() {
-    assertThrows(NoSuchElementException.class, () -> Maybe.nothing().get());
-    assertEquals("foo", Maybe.just("foo").get());
-  }
-
-  @Test
   void testOrDefault() {
     assertEquals("bar", Maybe.nothing().orDefault("bar"));
     assertEquals("foo", Maybe.just("foo").orDefault("bar"));
@@ -118,13 +110,13 @@ class MaybeTest {
   @Test
   void testMap() {
     assertTrue(Maybe.nothing().map(nothing -> "foo").isNothing());
-    assertEquals("!foo!", Maybe.just("foo").map(string -> '!' + string + '!').get());
+    assertEquals("!foo!", Maybe.just("foo").map(string -> '!' + string + '!').orDefault(null));
   }
 
   @Test
   void testFlatMap() {
     assertTrue(Maybe.nothing().flatMap(nothing -> Maybe.just("foo")).isNothing());
-    assertEquals("!foo!", Maybe.just("foo").flatMap(string -> Maybe.just('!' + string + '!')).get());
+    assertEquals("!foo!", Maybe.just("foo").flatMap(string -> Maybe.just('!' + string + '!')).orDefault(null));
   }
 
   @Test

@@ -23,11 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.Supplier;
 import net.kyori.mu.TestException;
 import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,11 +34,6 @@ class ThrowingSupplierTest {
   @Test
   void testOf() {
     assertThrows(TestException.class, () -> get(ThrowingSupplier.of(() -> { throw new TestException(); } )));
-  }
-
-  @Test
-  void testUnwrapping() {
-    assertThrows(TestException.class, () -> get(ThrowingSupplier.unwrapping(() -> { throw new InvocationTargetException(new TestException()); })));
   }
 
   @Test

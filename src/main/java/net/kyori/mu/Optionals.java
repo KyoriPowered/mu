@@ -23,13 +23,11 @@
  */
 package net.kyori.mu;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A collection of utilities for working with optionals.
@@ -86,17 +84,6 @@ public interface Optionals {
    */
   static boolean isInstance(final @NonNull Optional<?> optional, final @NonNull Class<?> type) {
     return optional.isPresent() && type.isInstance(optional.get());
-  }
-
-  /**
-   * Creates a stream from an optional.
-   *
-   * @param optional the optional
-   * @param <T> the type
-   * @return a stream
-   */
-  static <T> @NonNull Stream<T> stream(final @NonNull Optional<T> optional) {
-    return optional.map(Stream::of).orElse(Stream.empty());
   }
 
   /**

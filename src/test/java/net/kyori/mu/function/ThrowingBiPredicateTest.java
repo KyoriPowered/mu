@@ -23,11 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.BiPredicate;
 import net.kyori.mu.TestException;
 import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.BiPredicate;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -35,11 +33,6 @@ class ThrowingBiPredicateTest {
   @Test
   void testOf() {
     assertThrows(TestException.class, () -> test(ThrowingBiPredicate.of((a, b) -> { throw new TestException(); })));
-  }
-
-  @Test
-  void testUnwrapping() {
-    assertThrows(TestException.class, () -> test(ThrowingBiPredicate.unwrapping((a, b) -> { throw new InvocationTargetException(new TestException()); })));
   }
 
   private static void test(final BiPredicate<String, String> supplier) { supplier.test("kitten", "kitty"); }

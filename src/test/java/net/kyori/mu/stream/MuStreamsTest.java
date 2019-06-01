@@ -24,10 +24,10 @@
 package net.kyori.mu.stream;
 
 import com.google.common.collect.Iterators;
-import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth8.assertThat;
 
@@ -43,16 +43,22 @@ class MuStreamsTest {
   }
 
   @Test
-  void testStream_collection() {
+  void testOf_collection() {
     final Iterable<String> iterable = Arrays.asList("abc", "def");
     final Stream<String> stream = MuStreams.of(iterable);
     assertThat(stream).containsExactly("abc", "def").inOrder();
   }
 
   @Test
-  void testStream_iterable() {
+  void testOf_iterable() {
     final Iterable<String> iterable = () -> Iterators.forArray("abc", "def");
     final Stream<String> stream = MuStreams.of(iterable);
     assertThat(stream).containsExactly("abc", "def").inOrder();
+  }
+
+  @Test
+  void testOf_optional() {
+    assertThat(MuStreams.of(Optional.empty())).isEmpty();
+    assertThat(MuStreams.of(Optional.of("abc"))).containsExactly("abc");
   }
 }

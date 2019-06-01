@@ -23,10 +23,8 @@
  */
 package net.kyori.mu.function;
 
-import net.kyori.mu.exception.Exceptions;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.function.BinaryOperator;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A {@link BinaryOperator} that allows for throwing checked exceptions.
@@ -46,23 +44,5 @@ public interface ThrowingBinaryOperator<T, E extends Throwable> extends BinaryOp
    */
   static <T, E extends Throwable> @NonNull ThrowingBinaryOperator<T, E> of(final @NonNull ThrowingBinaryOperator<T, E> operator) {
     return operator;
-  }
-
-  /**
-   * Returns a binary operator which will unwrap and rethrow any throwables caught in {@code operator}.
-   *
-   * @param operator the binary operator
-   * @param <T> the input type
-   * @param <E> the exception type
-   * @return the binary operator
-   */
-  static <T, E extends Throwable> @NonNull ThrowingBinaryOperator<T, E> unwrapping(final @NonNull ThrowingBinaryOperator<T, E> operator) {
-    return (first, second) -> {
-      try {
-        return operator.throwingApply(first, second);
-      } catch(final Throwable t) {
-        throw Exceptions.rethrow(Exceptions.unwrap(t));
-      }
-    };
   }
 }

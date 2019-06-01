@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.exception;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A collection of methods for working with exceptions.

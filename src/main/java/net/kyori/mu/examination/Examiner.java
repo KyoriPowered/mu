@@ -21,19 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.function;
+package net.kyori.mu.examination;
 
-import java.util.function.Consumer;
-import net.kyori.mu.TestException;
-import org.junit.jupiter.api.Test;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-class ThrowingConsumerTest {
-  @Test
-  void testOf() {
-    assertThrows(TestException.class, () -> accept(ThrowingConsumer.of(a -> { throw new TestException(); })));
-  }
-
-  private static void accept(final Consumer<String> consumer) { consumer.accept("kitten"); }
+/**
+ * An examiner.
+ *
+ * @param <R> the result type
+ */
+public interface Examiner<R> {
+  /**
+   * Examines.
+   *
+   * @param value the value to examine
+   * @return the result
+   */
+  @NonNull R examine(final @Nullable Object value);
 }

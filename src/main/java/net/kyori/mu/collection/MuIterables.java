@@ -23,12 +23,11 @@
  */
 package net.kyori.mu.collection;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /*
  * Name is prefixed with 'Mu' to avoid conflict with com.google.common.collect.Iterables

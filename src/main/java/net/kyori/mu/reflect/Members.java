@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.reflect;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A collection of utilities for working with class members.

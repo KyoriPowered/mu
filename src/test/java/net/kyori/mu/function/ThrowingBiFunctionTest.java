@@ -23,11 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.BiFunction;
 import net.kyori.mu.TestException;
 import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.BiFunction;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -35,11 +33,6 @@ class ThrowingBiFunctionTest {
   @Test
   void testOf() {
     assertThrows(TestException.class, () -> apply(ThrowingBiFunction.of((a, b) -> { throw new TestException(); })));
-  }
-
-  @Test
-  void testUnwrapping() {
-    assertThrows(TestException.class, () -> apply(ThrowingBiFunction.unwrapping((a, b) -> { throw new InvocationTargetException(new TestException()); })));
   }
 
   private static void apply(final BiFunction<String, String, String> function) { function.apply("kitten", "kitty"); }

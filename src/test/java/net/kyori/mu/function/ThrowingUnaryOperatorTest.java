@@ -23,11 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.UnaryOperator;
 import net.kyori.mu.TestException;
 import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.UnaryOperator;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -35,11 +33,6 @@ class ThrowingUnaryOperatorTest {
   @Test
   void testOf() {
     assertThrows(TestException.class, () -> apply(ThrowingUnaryOperator.of(a -> { throw new TestException(); })));
-  }
-
-  @Test
-  void testUnwrapping() {
-    assertThrows(TestException.class, () -> apply(ThrowingUnaryOperator.unwrapping(a -> { throw new InvocationTargetException(new TestException()); })));
   }
 
   private static void apply(final UnaryOperator<String> operator) { operator.apply("kitten"); }

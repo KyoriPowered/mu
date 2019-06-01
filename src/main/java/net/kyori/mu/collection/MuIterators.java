@@ -23,11 +23,9 @@
  */
 package net.kyori.mu.collection;
 
+import java.util.Iterator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /*
  * Name is prefixed with 'Mu' to avoid conflict with com.google.common.collect.Iterators
@@ -45,22 +43,6 @@ public interface MuIterators {
    * @return an iterator
    */
   static <T> @NonNull Iterator<T> singleton(final @Nullable T value) {
-    return new Iterator<T>() {
-      private boolean done;
-
-      @Override
-      public boolean hasNext() {
-        return !this.done;
-      }
-
-      @Override
-      public T next() {
-        if(this.done) {
-          throw new NoSuchElementException();
-        }
-        this.done = true;
-        return value;
-      }
-    };
+    return new SingletonIterator<>(value);
   }
 }

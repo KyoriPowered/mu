@@ -21,16 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.examine;
-
-import net.kyori.mu.Composer;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.junit.jupiter.api.Test;
+package net.kyori.mu.examination;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.stream.Stream;
+import net.kyori.mu.Composer;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -52,7 +52,7 @@ class StringExaminerTest {
   @Test
   void testExaminable() {
     assertEquals("ExaminableA{abc=\"def\", ghi=ExaminableC{jkl=\"mno\", pqr=\"stu\", vwx=\"yz\"}}", this.examiner.examine(new ExaminableA()));
-    assertEquals("ExaminableA{abc=\"def\", ghi=ExaminableC{jkl=\"mno\", pqr=\"stu\", vwx=\"yz\"}}", new ExaminableA().examine(this.examiner));
+    Assertions.assertEquals("ExaminableA{abc=\"def\", ghi=ExaminableC{jkl=\"mno\", pqr=\"stu\", vwx=\"yz\"}}", new ExaminableA().examine(this.examiner));
   }
 
   @Test

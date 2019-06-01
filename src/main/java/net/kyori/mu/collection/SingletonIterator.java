@@ -21,19 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.function;
+package net.kyori.mu.collection;
 
-import java.util.function.Consumer;
-import net.kyori.mu.TestException;
-import org.junit.jupiter.api.Test;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+final class SingletonIterator<T> implements Iterator<T> {
+  private final @Nullable T value;
+  private boolean done;
 
-class ThrowingConsumerTest {
-  @Test
-  void testOf() {
-    assertThrows(TestException.class, () -> accept(ThrowingConsumer.of(a -> { throw new TestException(); })));
+  SingletonIterator(@Nullable final T value) {
+    this.value = value;
   }
 
-  private static void accept(final Consumer<String> consumer) { consumer.accept("kitten"); }
+  @Override
+  public boolean hasNext() {
+    return !this.done;
+  }
+
+  @Override
+  public T next() {
+    if(this.done) {
+      throw new NoSuchElementException();
+    }
+    this.done = true;
+    return this.value;
+  }
 }

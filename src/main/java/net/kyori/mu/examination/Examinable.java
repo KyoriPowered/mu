@@ -21,28 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.function;
+package net.kyori.mu.examination;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.stream.Stream;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * An operation that accepts two input arguments and returns no result.
- *
- * @param <T> the type of the first input argument
- * @param <U> the type of the second input argument
- * @param <V> the type of the third input argument
- * @see Consumer
- * @see BiConsumer
+ * Something that can be examined.
  */
-@FunctionalInterface
-public interface TriConsumer<T, U, V> {
+public interface Examinable {
   /**
-   * Performs this operation on the given arguments.
+   * Examines.
    *
-   * @param t the first input argument
-   * @param u the second input argument
-   * @param v the third input argument
+   * @param examiner the examiner
+   * @param <R> the result type
+   * @return the examination result
    */
-  void accept(final T t, final U u, final V v);
+  default <R> @NonNull R examine(final @NonNull Examiner<R> examiner) {
+    return examiner.examine(this);
+  }
+
+  /**
+   * Gets the examinable name.
+   *
+   * @return the examinable name
+   */
+  default @NonNull String examinableName() {
+    return this.getClass().getSimpleName();
+  }
+
+  /**
+   * Gets a stream of examinable properties.
+   *
+   * @return a stream of examinable properties
+   */
+  @NonNull Stream<? extends ExaminableProperty> examinableProperties();
 }

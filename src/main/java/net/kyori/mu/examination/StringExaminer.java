@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.examine;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
+package net.kyori.mu.examination;
 
 import java.util.Collection;
 import java.util.Map;
@@ -31,6 +29,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class StringExaminer extends AbstractExaminer<String> {
   private static final Function<String, String> DEFAULT_ESCAPER = string -> string

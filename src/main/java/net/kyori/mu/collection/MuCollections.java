@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.collection;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Collection;
 import java.util.function.Function;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /*
  * Name is prefixed with 'Mu' to avoid conflict with java.util.Collections

@@ -23,11 +23,11 @@
  */
 package net.kyori.mu.stream;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /*
  * Name is prefixed with 'Mu' to avoid conflict with com.google.common.collect.Streams
@@ -63,5 +63,16 @@ public interface MuStreams {
       return ((Collection<E>) iterable).stream();
     }
     return StreamSupport.stream(iterable.spliterator(), false);
+  }
+
+  /**
+   * Creates a stream from an optional.
+   *
+   * @param optional the optional
+   * @param <T> the type
+   * @return a stream
+   */
+  static <T> @NonNull Stream<T> of(final @NonNull Optional<T> optional) {
+    return optional.map(Stream::of).orElse(Stream.empty());
   }
 }

@@ -23,9 +23,8 @@
  */
 package net.kyori.mu.concurrent;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.concurrent.CompletableFuture;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

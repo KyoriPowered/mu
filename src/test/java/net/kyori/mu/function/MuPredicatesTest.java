@@ -23,9 +23,8 @@
  */
 package net.kyori.mu.function;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.function.Predicate;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;

@@ -45,23 +45,6 @@ public interface ThrowingRunnable<E extends Throwable> extends Runnable {
   }
 
   /**
-   * Returns a runnable which will unwrap and rethrow any throwables caught in {@code runnable}.
-   *
-   * @param runnable the runnable
-   * @param <E> the exception type
-   * @return the runnable
-   */
-  static <E extends Throwable> @NonNull ThrowingRunnable<E> unwrapping(final @NonNull ThrowingRunnable<E> runnable) {
-    return () -> {
-      try {
-        runnable.throwingRun();
-      } catch(final Throwable t) {
-        throw Exceptions.rethrow(Exceptions.unwrap(t));
-      }
-    };
-  }
-
-  /**
    * Run.
    *
    * @throws E potential exception

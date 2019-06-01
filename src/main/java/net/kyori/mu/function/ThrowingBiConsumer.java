@@ -23,10 +23,9 @@
  */
 package net.kyori.mu.function;
 
+import java.util.function.BiConsumer;
 import net.kyori.mu.exception.Exceptions;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.function.BiConsumer;
 
 /**
  * A {@link BiConsumer} that allows for throwing checked exceptions.
@@ -48,25 +47,6 @@ public interface ThrowingBiConsumer<T, U, E extends Throwable> extends BiConsume
    */
   static <T, U, E extends Throwable> @NonNull ThrowingBiConsumer<T, U, E> of(final @NonNull ThrowingBiConsumer<T, U, E> consumer) {
     return consumer;
-  }
-
-  /**
-   * Returns a consumer which will unwrap and rethrow any throwables caught in {@code consumer}.
-   *
-   * @param consumer the consumer
-   * @param <T> the first input type
-   * @param <U> the second input type
-   * @param <E> the exception type
-   * @return a consumer
-   */
-  static <T, U, E extends Throwable> @NonNull ThrowingBiConsumer<T, U, E> unwrapping(final @NonNull ThrowingBiConsumer<T, U, E> consumer) {
-    return (first, second) -> {
-      try {
-        consumer.throwingAccept(first, second);
-      } catch(final Throwable t) {
-        throw Exceptions.rethrow(Exceptions.unwrap(t));
-      }
-    };
   }
 
   /**

@@ -25,11 +25,10 @@ package net.kyori.mu.exception;
 
 import com.google.common.truth.ThrowableSubject;
 import com.google.common.truth.Truth;
-import net.kyori.mu.TestException;
-import org.junit.jupiter.api.Test;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
+import net.kyori.mu.TestException;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertSame;

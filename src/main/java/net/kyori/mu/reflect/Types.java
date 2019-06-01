@@ -23,12 +23,11 @@
  */
 package net.kyori.mu.reflect;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.Function;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A collection of utilities for working with types.

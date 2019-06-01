@@ -23,9 +23,8 @@
  */
 package net.kyori.mu.math;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Random;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * 2 plus 2 equals 5... right?
@@ -98,7 +97,7 @@ public final class MuMath {
    * @param max the max value, inclusive
    * @return {@code true} if between {@code min} and {@code max}, {@code false} otherwise
    */
-  public static boolean isBetween(final double value, final double min, final double max) {
+  public static boolean between(final double value, final double min, final double max) {
     return value >= min && value <= max;
   }
 
@@ -110,7 +109,7 @@ public final class MuMath {
    * @param max the max value, inclusive
    * @return {@code true} if between {@code min} and {@code max}, {@code false} otherwise
    */
-  public static boolean isBetween(final float value, final float min, final float max) {
+  public static boolean between(final float value, final float min, final float max) {
     return value >= min && value <= max;
   }
 
@@ -122,7 +121,7 @@ public final class MuMath {
    * @param max the max value, inclusive
    * @return {@code true} if between {@code min} and {@code max}, {@code false} otherwise
    */
-  public static boolean isBetween(final int value, final int min, final int max) {
+  public static boolean between(final int value, final int min, final int max) {
     return value >= min && value <= max;
   }
 
@@ -134,7 +133,7 @@ public final class MuMath {
    * @param max the max value, inclusive
    * @return {@code true} if between {@code min} and {@code max}, {@code false} otherwise
    */
-  public static boolean isBetween(final long value, final long min, final long max) {
+  public static boolean between(final long value, final long min, final long max) {
     return value >= min && value <= max;
   }
 
