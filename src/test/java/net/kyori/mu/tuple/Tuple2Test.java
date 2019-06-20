@@ -26,7 +26,7 @@ package net.kyori.mu.tuple;
 import com.google.common.truth.StringSubject;
 import java.util.AbstractMap;
 import java.util.Map;
-import net.kyori.mu.examination.ExaminableProperty;
+import net.kyori.examination.ExaminableProperty;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;

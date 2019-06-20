@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
-import net.kyori.mu.examination.ExaminableProperty;
+import net.kyori.examination.ExaminableProperty;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;

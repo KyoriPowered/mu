@@ -26,8 +26,8 @@ package net.kyori.mu.tuple;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import net.kyori.mu.examination.Examinable;
-import net.kyori.mu.examination.ExaminableProperty;
+import net.kyori.examination.Examinable;
+import net.kyori.examination.ExaminableProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
