@@ -84,6 +84,8 @@ public interface Annotations {
     if(annotation != null) {
       return annotation;
     }
+    // private and static methods cannot be an override
+    if(Members.isPrivate(method) || Members.isStatic(method)) return null;
     final Class<?> declaringClass = method.getDeclaringClass();
     return Types.find(declaringClass, type -> {
       // cannot search same class
@@ -95,11 +97,10 @@ public interface Annotations {
         return null;
       }
       if(source == null) return null;
-      // private and static methods cannot be an override
-      if(Members.isPrivate(method) || Members.isStatic(method)) return null;
-      if(Members.isPrivate(source) || Members.isStatic(source)) return null;
       // source cannot be overridden if final
       if(Members.isFinal(source)) return null;
+      // private and static methods cannot be an override
+      if(Members.isPrivate(source) || Members.isStatic(source)) return null;
       // package-private methods can only be overridden from the same package
       if(Members.isPackagePrivate(method) && !Types.inSamePackage(method.getDeclaringClass(), source.getDeclaringClass())) return null;
       return source.getDeclaredAnnotation(annotationType);

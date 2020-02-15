@@ -25,6 +25,7 @@ package net.kyori.mu;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -136,6 +137,16 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   T orGet(final @NonNull Supplier<? extends T> other);
 
   /**
+   * Gets the value if present, otherwise throws a {@link NoSuchElementException}.
+   *
+   * @return the value
+   * @throws NoSuchElementException if no value is present
+   */
+  default @NonNull T orThrow() throws NoSuchElementException {
+    return this.orThrow(NoSuchElementException::new);
+  }
+
+  /**
    * Gets the value if present, otherwise throws an exception of type {@code X} supplied by {@code supplier} if not.
    *
    * @param supplier the exception supplier
@@ -143,7 +154,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
    * @return the value
    * @throws X if no value is present
    */
-  <X extends Throwable> T orThrow(final @NonNull Supplier<X> supplier) throws X;
+  <X extends Throwable> @NonNull T orThrow(final @NonNull Supplier<X> supplier) throws X;
 
   /**
    * Returns a {@code Maybe} containing the value if it is present, otherwise returns {@code that}.
@@ -251,7 +262,8 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   @SafeVarargs
   @SuppressWarnings("unchecked")
   static <T> @NonNull Maybe<T> first(final @NonNull Maybe<? extends T>... maybes) {
-    for(final Maybe<? extends T> maybe : maybes) {
+    for(int i = 0, length = maybes.length; i < length; i++) {
+      final Maybe<? extends T> maybe = maybes[i];
       if(maybe.isJust()) {
         return (Maybe<T>) maybe;
       }
@@ -305,6 +317,11 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     @Override
     public T orGet(final @NonNull Supplier<? extends T> other) {
       return other.get();
+    }
+
+    @Override
+    public @NonNull T orThrow() throws NoSuchElementException {
+      throw new NoSuchElementException();
     }
 
     @Override
@@ -420,6 +437,11 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
 
     @Override
     public T orGet(final @NonNull Supplier<? extends T> other) {
+      return this.value;
+    }
+
+    @Override
+    public @NonNull T orThrow() throws NoSuchElementException {
       return this.value;
     }
 

@@ -29,8 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FieldsTest {
   @Test
-  void testGet() {
-    assertEquals("ABC", Fields.get(TestEnum.ABC).getName());
+  void testField() {
+    assertEquals("ABC", Fields.field(TestEnum.ABC).getName());
   }
 
   private enum TestEnum {

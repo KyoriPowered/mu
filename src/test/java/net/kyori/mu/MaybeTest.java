@@ -24,6 +24,7 @@
 package net.kyori.mu;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -86,6 +87,8 @@ class MaybeTest {
 
   @Test
   void testOrThrow() {
+    assertThrows(NoSuchElementException.class, () -> Maybe.nothing().orThrow());
+    assertEquals("foo", Maybe.just("foo").orThrow());
     assertThrows(Expected.class, () -> Maybe.nothing().orThrow(Expected::new));
     assertEquals("foo", Maybe.just("foo").orThrow(Expected::new));
   }

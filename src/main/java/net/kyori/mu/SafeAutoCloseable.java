@@ -21,31 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.collection;
+package net.kyori.mu;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-final class SingletonIterator<T> implements Iterator<T> {
-  private final @Nullable T value;
-  private boolean hasNext = true;
-
-  SingletonIterator(@Nullable final T value) {
-    this.value = value;
-  }
-
+/**
+ * {@link AutoCloseable}, but not throw-y.
+ */
+public interface SafeAutoCloseable extends AutoCloseable {
   @Override
-  public boolean hasNext() {
-    return this.hasNext;
-  }
-
-  @Override
-  public T next() {
-    if(!this.hasNext) {
-      throw new NoSuchElementException();
-    }
-    this.hasNext = false;
-    return this.value;
-  }
+  void close();
 }

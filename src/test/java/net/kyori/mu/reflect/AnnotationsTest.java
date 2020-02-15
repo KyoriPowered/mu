@@ -49,6 +49,17 @@ class AnnotationsTest {
   }
 
   @Test
+  void testFindClass_local() {
+    @Foo("class=x")
+    class X {
+    }
+    class Y extends B {
+    }
+    assertAnnotationValue("class=x", Annotations.find(X.class, Foo.class));
+    assertAnnotationValue("class=b", Annotations.find(Y.class, Foo.class));
+  }
+
+  @Test
   void testFindField() throws NoSuchFieldException {
     assertNull(Annotations.find(B.class.getDeclaredField("y"), Foo.class));
     assertAnnotationValue("class=b,field=z", Annotations.find(B.class.getDeclaredField("z"), Foo.class));

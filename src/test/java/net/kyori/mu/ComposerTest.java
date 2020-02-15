@@ -68,7 +68,7 @@ class ComposerTest {
   void testMake() {
     final List<String> values = Composer.make(
       new ArrayList<String>(),
-      (list) -> {
+      list -> {
         list.add("abc");
         list.add("def");
       },

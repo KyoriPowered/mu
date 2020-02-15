@@ -36,7 +36,7 @@ public interface Fields {
    * @param constant the constant
    * @return the field
    */
-  static @NonNull Field get(final @NonNull Enum<?> constant) {
+  static @NonNull Field field(final @NonNull Enum<?> constant) {
     try {
       return constant.getDeclaringClass().getDeclaredField(constant.name());
     } catch(final NoSuchFieldException e) {
