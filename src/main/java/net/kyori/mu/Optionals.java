@@ -43,8 +43,10 @@ public interface Optionals {
    */
   @SuppressWarnings("unchecked")
   static <T> @NonNull Optional<T> cast(final @NonNull Optional<?> optional, final @NonNull Class<T> type) {
-    // not necessary to re-wrap, we can just cast
-    return isInstance(optional, type) ? (Optional<T>) optional : Optional.empty();
+    return isInstance(optional, type)
+      // not necessary to re-wrap, we can just cast
+      ? (Optional<T>) optional
+      : Optional.empty();
   }
 
   /**

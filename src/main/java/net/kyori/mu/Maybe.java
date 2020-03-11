@@ -234,7 +234,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
    * @param <T> the value type
    * @return a collector that accumulates zero or one elements into a {@code Maybe}
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"rawtypes", "unchecked"})
   static <T> @NonNull Collector<T, ?, Maybe<T>> collector() {
     return (Collector) COLLECTOR;
   }
@@ -325,7 +325,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     }
 
     @Override
-    public <X extends Throwable> T orThrow(final @NonNull Supplier<X> supplier) throws X {
+    public <X extends Throwable> @NonNull T orThrow(final @NonNull Supplier<X> supplier) throws X {
       throw supplier.get();
     }
 
@@ -446,7 +446,7 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     }
 
     @Override
-    public <X extends Throwable> T orThrow(final @NonNull Supplier<X> supplier) {
+    public <X extends Throwable> @NonNull T orThrow(final @NonNull Supplier<X> supplier) {
       return this.value;
     }
 
@@ -521,8 +521,8 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     public boolean equals(final @Nullable Object other) {
       if(this == other) return true;
       if(other == null || this.getClass() != other.getClass()) return false;
-      final Just<?> just = (Just<?>) other;
-      return Objects.equals(this.value, just.value);
+      final Just<?> that = (Just<?>) other;
+      return Objects.equals(this.value, that.value);
     }
 
     @Override

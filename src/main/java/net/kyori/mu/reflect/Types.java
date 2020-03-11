@@ -32,7 +32,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * A collection of utilities for working with types.
  */
-public interface Types {
+public final class Types {
+  private Types() {
+  }
+
   /**
    * Finds a class in the hierarchy matching the provided {@code type}, {@code predicate}, and {@code function}.
    *
@@ -44,7 +47,7 @@ public interface Types {
    */
   // thanks, kenzie
   @SuppressWarnings("unchecked")
-  static <T, R> @Nullable R find(final @NonNull Class<T> first, final @NonNull Function<Class<? super T>, R> function) {
+  public static <T, R> @Nullable R find(final @NonNull Class<T> first, final @NonNull Function<Class<? super T>, R> function) {
     final Deque<Class<? super T>> classes = new ArrayDeque<>();
     classes.add(first);
 
@@ -76,7 +79,7 @@ public interface Types {
    * @param b class b
    * @return {@code true} if {@code a} and {@code b} are in the same package
    */
-  static boolean inSamePackage(final @NonNull Class<?> a, final @NonNull Class<?> b) {
+  /* package */ static boolean inSamePackage(final @NonNull Class<?> a, final @NonNull Class<?> b) {
     return a.getPackage().equals(b.getPackage());
   }
 }

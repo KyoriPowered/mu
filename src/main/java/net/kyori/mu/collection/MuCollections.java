@@ -48,9 +48,11 @@ public interface MuCollections {
    * @return an element
    */
   static <E> /* @Nullable */ E reduce(final @NonNull Collection<? extends E> collection, final /* @Nullable */ E empty, final @NonNull Function<Iterable<? extends E>, ? extends E> reducer) {
-    switch(collection.size()) {
-      case 0: return empty;
-      case 1: return collection.iterator().next();
+    final int size = collection.size();
+    if(size == 0) {
+      return empty;
+    } else if(size == 1) {
+      return collection.iterator().next();
     }
     return reducer.apply(collection);
   }

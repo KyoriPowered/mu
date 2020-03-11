@@ -30,11 +30,14 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 /**
  * A collection of utilities for working with class members.
  */
-public interface Members {
+public final class Members {
   /**
    * The access modifiers that can be applied to a member.
    */
-  int ACCESS_MODIFIERS = Modifier.PUBLIC | Modifier.PROTECTED | Modifier.PRIVATE;
+  private static final int ACCESS_MODIFIERS = Modifier.PUBLIC | Modifier.PROTECTED | Modifier.PRIVATE;
+
+  private Members() {
+  }
 
   /**
    * Checks if {@code member} is package-private.
@@ -42,7 +45,7 @@ public interface Members {
    * @param member the member
    * @return {@code true} if package-private, {@code false} otherwise
    */
-  static boolean isPackagePrivate(final @NonNull Member member) {
+  public static boolean isPackagePrivate(final @NonNull Member member) {
     return (member.getModifiers() & ACCESS_MODIFIERS) == 0;
   }
 
@@ -52,7 +55,7 @@ public interface Members {
    * @param member the member
    * @return {@code true} if final, {@code false} otherwise
    */
-  static boolean isFinal(final @NonNull Member member) {
+  public static boolean isFinal(final @NonNull Member member) {
     return Modifier.isFinal(member.getModifiers());
   }
 
@@ -62,7 +65,7 @@ public interface Members {
    * @param member the member
    * @return {@code true} if package-private, {@code false} otherwise
    */
-  static boolean isPrivate(final @NonNull Member member) {
+  public static boolean isPrivate(final @NonNull Member member) {
     return Modifier.isPrivate(member.getModifiers());
   }
 
@@ -72,7 +75,7 @@ public interface Members {
    * @param member the member
    * @return {@code true} if package-private, {@code false} otherwise
    */
-  static boolean isStatic(final @NonNull Member member) {
+  public static boolean isStatic(final @NonNull Member member) {
     return Modifier.isStatic(member.getModifiers());
   }
 }

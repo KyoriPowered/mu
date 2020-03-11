@@ -32,7 +32,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * A collection of utilities for working with annotations.
  */
-public interface Annotations {
+public final class Annotations {
+  private Annotations() {
+  }
+
   /**
    * Finds an annotation by searching the class hierarchy.
    *
@@ -41,11 +44,11 @@ public interface Annotations {
    * @param <A> the annotation type
    * @return the annotation
    */
-  static <A extends Annotation> @Nullable A find(final @NonNull AnnotatedElement element, final @NonNull Class<A> annotationType) {
+  public static <A extends Annotation> @Nullable A findDeclared(final @NonNull AnnotatedElement element, final @NonNull Class<A> annotationType) {
     if(element instanceof Class<?>) {
-      return find((Class<?>) element, annotationType);
+      return findDeclared((Class<?>) element, annotationType);
     } else if(element instanceof Method) {
-      return find((Method) element, annotationType);
+      return findDeclared((Method) element, annotationType);
     } else {
       final /* @Nullable */ A annotation = element.getDeclaredAnnotation(annotationType);
       if(annotation != null) {
@@ -63,7 +66,7 @@ public interface Annotations {
    * @param <A> the annotation type
    * @return the annotation
    */
-  static <A extends Annotation> @Nullable A find(final @NonNull Class<?> klass, final @NonNull Class<A> annotationType) {
+  public static <A extends Annotation> @Nullable A findDeclared(final @NonNull Class<?> klass, final @NonNull Class<A> annotationType) {
     final /* @Nullable */ A annotation = klass.getDeclaredAnnotation(annotationType);
     if(annotation != null) {
       return annotation;
@@ -79,7 +82,7 @@ public interface Annotations {
    * @param <A> the annotation type
    * @return the annotation
    */
-  static <A extends Annotation> @Nullable A find(final @NonNull Method method, final @NonNull Class<A> annotationType) {
+  public static <A extends Annotation> @Nullable A findDeclared(final @NonNull Method method, final @NonNull Class<A> annotationType) {
     final /* @Nullable */ A annotation = method.getDeclaredAnnotation(annotationType);
     if(annotation != null) {
       return annotation;
