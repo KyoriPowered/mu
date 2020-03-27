@@ -34,7 +34,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public interface Optionals {
   /**
-   * Casts {@code optional} to an optional of type {@code type} if the value held by {@code optional} is an instance of {@code type}
+   * Casts {@code optional} to an optional of type {@code type} if the value held by {@code optional} is an instance of {@code type}.
    *
    * @param optional the optional
    * @param type the type

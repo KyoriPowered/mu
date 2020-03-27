@@ -61,4 +61,15 @@ class MuStreamsTest {
     assertThat(MuStreams.of(Optional.empty())).isEmpty();
     assertThat(MuStreams.of(Optional.of("abc"))).containsExactly("abc");
   }
+
+  @Test
+  void testCast() {
+    class A {}
+    class B {}
+    final A a0 = new A();
+    final A a1 = new A();
+    final B b0 = new B();
+    final B b1 = new B();
+    assertThat(MuStreams.cast(Stream.of(a0, b0, a1, b1), A.class)).containsExactly(a0, a1).inOrder();
+  }
 }

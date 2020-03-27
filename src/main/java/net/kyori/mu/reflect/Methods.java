@@ -21,12 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu;
+package net.kyori.mu.reflect;
+
+import java.lang.reflect.Method;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * {@link AutoCloseable}, but not throw-y.
+ * A collection of utilities for working with methods.
  */
-public interface SafeAutoCloseable extends AutoCloseable {
-  @Override
-  void close();
+final class Methods {
+  private Methods() {
+  }
+
+  /* package */ static @Nullable Method findDeclaredIn(final Class<?> klass, final String name, final Class<?>... parameterTypes) {
+    try {
+      return klass.getDeclaredMethod(name, parameterTypes);
+    } catch(final NoSuchMethodException e) {
+      return null;
+    }
+  }
 }

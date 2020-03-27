@@ -25,6 +25,7 @@ package net.kyori.mu.reflect;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Objects;
 import java.util.function.Function;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -50,9 +51,8 @@ public final class Types {
   public static <T, R> @Nullable R find(final @NonNull Class<T> first, final @NonNull Function<Class<? super T>, R> function) {
     final Deque<Class<? super T>> classes = new ArrayDeque<>();
     classes.add(first);
-
     while(!classes.isEmpty()) {
-      final /* @Nullable */ Class<? super T> next = classes.remove();
+      final Class<? super T> next = classes.remove();
 
       final /* @Nullable */ R result = function.apply(next);
       if(result != null) {
@@ -80,6 +80,6 @@ public final class Types {
    * @return {@code true} if {@code a} and {@code b} are in the same package
    */
   /* package */ static boolean inSamePackage(final @NonNull Class<?> a, final @NonNull Class<?> b) {
-    return a.getPackage().equals(b.getPackage());
+    return Objects.equals(a.getPackage(), b.getPackage());
   }
 }

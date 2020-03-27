@@ -21,25 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.collection;
+package net.kyori.mu;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-class MuMapsTest {
-  @Test
-  void testSupplyIfAbsent() {
-    final Map<String, String> map = new HashMap<>();
-    assertNull(map.get("abc"));
-    final String v0 = MuMaps.supplyIfAbsent(map, "abc", () -> "def");
-    assertEquals("def", v0);
-    assertEquals("def", map.get("abc"));
-    final String v1 = MuMaps.supplyIfAbsent(map, "abc", () -> "ghi");
-    assertEquals("def", v1);
-    assertEquals("def", map.get("abc"));
-  }
+/**
+ * {@link AutoCloseable}, but not throw-y.
+ */
+public interface NoThrowAutoCloseable extends AutoCloseable {
+  @Override
+  void close();
 }

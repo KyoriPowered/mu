@@ -62,10 +62,10 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   );
 
   /**
-   * Returns an empty {@code Maybe}.
+   * Returns a {@code Maybe} containing nothing.
    *
    * @param <T> the type
-   * @return an empty {@code Maybe}
+   * @return a {@code Maybe} containing nothing.
    */
   @SuppressWarnings("unchecked")
   static <T> @NonNull Maybe<T> nothing() {
@@ -190,6 +190,15 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   <U> @NonNull Maybe<U> map(final @NonNull Function<? super T, ? extends U> function);
 
   /**
+   * Attempts to cast from {@code T} to {@code X} if the value contained is an instance of {@code type}.
+   *
+   * @param type the type
+   * @param <X> the type
+   * @return a {@code Maybe}
+   */
+  <X> @NonNull Maybe<X> cast(final @NonNull Class<X> type);
+
+  /**
    * Returns the result of applying the given function to the value if it is present, otherwise returns an empty {@code Maybe}.
    *
    * @param function the function to apply to the value if it is present
@@ -240,12 +249,24 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
   }
 
   /**
+   * Casts {@code maybe} to an maybe of type {@code type} if the value held by {@code maybe} is an instance of {@code type}
+   *
+   * @param maybe the maybe
+   * @param type the type
+   * @param <T> the type
+   * @return a maybe
+   */
+  static <T> @NonNull Maybe<T> cast(final @NonNull Maybe<?> maybe, final @NonNull Class<T> type) {
+    return maybe.cast(type);
+  }
+
+  /**
    * Gets a maybe with just {@code object} if {@code object} is an instance of {@code type}, or a maybe with nothing.
    *
    * @param object the object
    * @param type the type
    * @param <T> the type
-   * @return the maybe
+   * @return a maybe
    */
   @SuppressWarnings("unchecked")
   static <T> @NonNull Maybe<T> cast(final @Nullable Object object, final @NonNull Class<T> type) {
@@ -348,6 +369,11 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
 
     @Override
     public <U> @NonNull Maybe<U> map(final @NonNull Function<? super T, ? extends U> function) {
+      return nothing();
+    }
+
+    @Override
+    public <X> @NonNull Maybe<X> cast(final @NonNull Class<X> type) {
       return nothing();
     }
 
@@ -468,6 +494,15 @@ public interface Maybe<T> extends Examinable, Iterable<T> {
     @Override
     public <U> @NonNull Maybe<U> map(final @NonNull Function<? super T, ? extends U> function) {
       return just(function.apply(this.value));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <X> @NonNull Maybe<X> cast(final @NonNull Class<X> type) {
+      return type.isInstance(this.value)
+        // not necessary to re-wrap, we can just cast
+        ? (Maybe<X>) this
+        : nothing();
     }
 
     @Override

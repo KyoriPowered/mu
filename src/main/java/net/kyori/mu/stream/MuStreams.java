@@ -75,4 +75,16 @@ public interface MuStreams {
   static <T> @NonNull Stream<T> of(final @NonNull Optional<T> optional) {
     return optional.map(Stream::of).orElse(Stream.empty());
   }
+
+  /**
+   * Filters and maps {@code stream} to only contain elements of type {@code type}.
+   *
+   * @param stream the stream
+   * @param type the type
+   * @param <T> the type
+   * @return a stream
+   */
+  static <T> @NonNull Stream<T> cast(final @NonNull Stream<?> stream, final @NonNull Class<T> type) {
+    return stream.filter(type::isInstance).map(type::cast);
+  }
 }

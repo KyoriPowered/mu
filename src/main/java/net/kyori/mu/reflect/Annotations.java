@@ -45,15 +45,15 @@ public final class Annotations {
    * @return the annotation
    */
   public static <A extends Annotation> @Nullable A findDeclared(final @NonNull AnnotatedElement element, final @NonNull Class<A> annotationType) {
+    // try getting it on the element directly before trying to get more fancy
+    final /* @Nullable */ A annotation = element.getDeclaredAnnotation(annotationType);
+    if(annotation != null) {
+      return annotation;
+    }
     if(element instanceof Class<?>) {
       return findDeclared((Class<?>) element, annotationType);
     } else if(element instanceof Method) {
       return findDeclared((Method) element, annotationType);
-    } else {
-      final /* @Nullable */ A annotation = element.getDeclaredAnnotation(annotationType);
-      if(annotation != null) {
-        return annotation;
-      }
     }
     return null;
   }
@@ -83,6 +83,7 @@ public final class Annotations {
    * @return the annotation
    */
   public static <A extends Annotation> @Nullable A findDeclared(final @NonNull Method method, final @NonNull Class<A> annotationType) {
+    // try getting it on the method directly before trying to search through the hierarchy
     final /* @Nullable */ A annotation = method.getDeclaredAnnotation(annotationType);
     if(annotation != null) {
       return annotation;
@@ -93,12 +94,7 @@ public final class Annotations {
     return Types.find(declaringClass, type -> {
       // cannot search same class
       if(type == declaringClass) return null;
-      final Method source;
-      try {
-        source = type.getDeclaredMethod(method.getName(), method.getParameterTypes());
-      } catch(final NoSuchMethodException e) {
-        return null;
-      }
+      final Method source = Methods.findDeclaredIn(type, method.getName(), method.getParameterTypes());
       if(source == null) return null;
       // source cannot be overridden if final
       if(Members.isFinal(source)) return null;

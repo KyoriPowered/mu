@@ -178,16 +178,58 @@ class MaybeTest {
 
   @Test
   void testCast() {
+    final Maybe<CharSequence> mc = Maybe.just("abc");
+    final Maybe<String> ms = mc.cast(String.class);
+    assertTrue(ms.isJust());
+    assertEquals(Maybe.just("abc"), ms);
+
+    assertEquals(Maybe.<CharSequence>just("kitten"), Maybe.cast(Maybe.just("kitten"), CharSequence.class));
+
     assertEquals(Maybe.just("potato"), Maybe.cast("potato", String.class));
-    assertEquals(Maybe.nothing(), Maybe.cast("potato", Integer.class));
+    assertEquals(Maybe.nothing(), Maybe.cast("potato", Integer.class)); // a potato are not a number!
   }
 
   @Test
   void testFirst() {
-    assertEquals(Maybe.nothing(), Maybe.first(Maybe.nothing(), Maybe.nothing()));
-    assertEquals(Maybe.just("foo"), Maybe.first(Maybe.just("foo"), Maybe.just("bar")));
-    assertEquals(Maybe.nothing(), Maybe.first(Arrays.asList(Maybe.nothing(), Maybe.nothing())));
-    assertEquals(Maybe.just("foo"), Maybe.first(Arrays.asList(Maybe.just("foo"), Maybe.just("bar"))));
+    final Maybe<String> expected = Maybe.just("meow");
+    assertEquals(Maybe.nothing(), Maybe.first(
+      Maybe.nothing(),
+      Maybe.nothing()
+    ));
+    assertEquals(Maybe.nothing(), Maybe.first(Arrays.asList(
+      Maybe.nothing(),
+      Maybe.nothing()
+    )));
+    assertEquals(expected, Maybe.first(
+      expected,
+      Maybe.nothing(),
+      Maybe.nothing()
+    ));
+    assertEquals(expected, Maybe.first(Arrays.asList(
+      expected,
+      Maybe.nothing(),
+      Maybe.nothing()
+    )));
+    assertEquals(expected, Maybe.first(
+      Maybe.nothing(),
+      expected,
+      Maybe.nothing()
+    ));
+    assertEquals(expected, Maybe.first(Arrays.asList(
+      Maybe.nothing(),
+      expected,
+      Maybe.nothing()
+    )));
+    assertEquals(expected, Maybe.first(
+      Maybe.nothing(),
+      Maybe.nothing(),
+      expected
+    ));
+    assertEquals(expected, Maybe.first(Arrays.asList(
+      Maybe.nothing(),
+      Maybe.nothing(),
+      expected
+    )));
   }
 
   @Test

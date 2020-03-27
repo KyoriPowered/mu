@@ -73,7 +73,19 @@ class Tuple3Test {
   }
 
   @Test
-  void testMap() {
+  void testMap2() {
+    Tuple3<String, String, String> tuple = Tuple3.tuple3("a", "b", "c");
+    assertEquals("a", tuple.a());
+    assertEquals("b", tuple.b());
+    assertEquals("c", tuple.c());
+    tuple = tuple.map(a -> "x", b -> "y");
+    assertEquals("x", tuple.a());
+    assertEquals("y", tuple.b());
+    assertEquals("c", tuple.c());
+  }
+
+  @Test
+  void testMap3() {
     Tuple3<String, String, String> tuple = Tuple3.tuple3("a", "b", "c");
     assertEquals("a", tuple.a());
     assertEquals("b", tuple.b());

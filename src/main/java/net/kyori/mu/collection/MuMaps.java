@@ -77,7 +77,7 @@ public interface MuMaps {
    * @return the value
    * @see Map#computeIfAbsent(Object, Function)
    */
-  static <K, V> /* @Nullable */ V computeIfAbsent(final @NonNull Map<K, V> map, final /* @Nullable */ K key, final @NonNull Supplier<V> supplier) {
+  static <K, V> /* @Nullable */ V supplyIfAbsent(final @NonNull Map<K, V> map, final /* @Nullable */ K key, final @NonNull Supplier<V> supplier) {
     V value = map.get(key);
     if(value == null) {
       value = supplier.get();

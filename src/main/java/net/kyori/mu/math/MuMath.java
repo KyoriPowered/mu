@@ -41,6 +41,7 @@ public final class MuMath {
    * @param max the max value
    * @return the clamped value
    */
+  @SuppressWarnings("ManualMinMaxCalculation")
   public static double clamp(final double value, final double min, final double max) {
     if(value < min) return min;
     if(value > max) return max;
@@ -55,6 +56,7 @@ public final class MuMath {
    * @param max the max value
    * @return the clamped value
    */
+  @SuppressWarnings("ManualMinMaxCalculation")
   public static float clamp(final float value, final float min, final float max) {
     if(value < min) return min;
     if(value > max) return max;
@@ -69,6 +71,7 @@ public final class MuMath {
    * @param max the max value
    * @return the clamped value
    */
+  @SuppressWarnings("ManualMinMaxCalculation")
   public static int clamp(final int value, final int min, final int max) {
     if(value < min) return min;
     if(value > max) return max;
@@ -83,6 +86,7 @@ public final class MuMath {
    * @param max the max value
    * @return the clamped value
    */
+  @SuppressWarnings("ManualMinMaxCalculation")
   public static long clamp(final long value, final long min, final long max) {
     if(value < min) return min;
     if(value > max) return max;
@@ -167,6 +171,7 @@ public final class MuMath {
    * @param values the values
    * @return the minimum value
    */
+  @SuppressWarnings("ForLoopReplaceableByForEach")
   public static double min(final double... values) {
     double value = Double.POSITIVE_INFINITY;
     for(int i = 0, length = values.length; i < length; i++) {
@@ -181,6 +186,7 @@ public final class MuMath {
    * @param values the values
    * @return the minimum value
    */
+  @SuppressWarnings("ForLoopReplaceableByForEach")
   public static float min(final float... values) {
     float value = Float.POSITIVE_INFINITY;
     for(int i = 0, length = values.length; i < length; i++) {
@@ -195,6 +201,7 @@ public final class MuMath {
    * @param values the values
    * @return the maximum value
    */
+  @SuppressWarnings("ForLoopReplaceableByForEach")
   public static double max(final double... values) {
     double value = Double.NEGATIVE_INFINITY;
     for(int i = 0, length = values.length; i < length; i++) {
@@ -209,6 +216,7 @@ public final class MuMath {
    * @param values the values
    * @return the maximum value
    */
+  @SuppressWarnings("ForLoopReplaceableByForEach")
   public static double max(final float... values) {
     float value = Float.NEGATIVE_INFINITY;
     for(int i = 0, length = values.length; i < length; i++) {
@@ -250,6 +258,66 @@ public final class MuMath {
    * @return a value
    */
   public static int random(final @NonNull Random random, final int min, final int max) {
-    return random.nextInt(max - min + 1) + min;
+    return random.nextInt((max - min) + 1) + min;
+  }
+
+  /**
+   * Sums up {@code values}.
+   *
+   * @param values the values
+   * @return the sum
+   */
+  @SuppressWarnings("ForLoopReplaceableByForEach")
+  public static double sum(final double... values) {
+    double sum = 0d;
+    for(int i = 0, length = values.length; i < length; i++) {
+      sum += values[i];
+    }
+    return sum;
+  }
+
+  /**
+   * Sums up {@code values}.
+   *
+   * @param values the values
+   * @return the sum
+   */
+  @SuppressWarnings("ForLoopReplaceableByForEach")
+  public static float sum(final float... values) {
+    float sum = 0f;
+    for(int i = 0, length = values.length; i < length; i++) {
+      sum += values[i];
+    }
+    return sum;
+  }
+
+  /**
+   * Sums up {@code values}.
+   *
+   * @param values the values
+   * @return the sum
+   */
+  @SuppressWarnings("ForLoopReplaceableByForEach")
+  public static int sum(final int... values) {
+    int sum = 0;
+    for(int i = 0, length = values.length; i < length; i++) {
+      sum += values[i];
+    }
+    return sum;
+  }
+
+  /**
+   * Sums up {@code values}.
+   *
+   * @param values the values
+   * @return the sum
+   */
+  @SuppressWarnings("ForLoopReplaceableByForEach")
+  public static long sum(final long... values) {
+    long sum = 0;
+    for(int i = 0, length = values.length; i < length; i++) {
+      sum += values[i];
+    }
+    return sum;
   }
 }

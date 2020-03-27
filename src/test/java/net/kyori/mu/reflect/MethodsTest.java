@@ -21,25 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.kyori.mu.collection;
+package net.kyori.mu.reflect;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class MuMapsTest {
+class MethodsTest {
   @Test
-  void testSupplyIfAbsent() {
-    final Map<String, String> map = new HashMap<>();
-    assertNull(map.get("abc"));
-    final String v0 = MuMaps.supplyIfAbsent(map, "abc", () -> "def");
-    assertEquals("def", v0);
-    assertEquals("def", map.get("abc"));
-    final String v1 = MuMaps.supplyIfAbsent(map, "abc", () -> "ghi");
-    assertEquals("def", v1);
-    assertEquals("def", map.get("abc"));
+  void testFindDeclaredIn() {
+    assertNull(Methods.findDeclaredIn(Empty.class, "kitten"));
+    assertNotNull(Methods.findDeclaredIn(Full.class, "kitten"));
   }
+
+  static class Full {
+    void kitten() {}
+  }
+  static class Empty {}
 }
