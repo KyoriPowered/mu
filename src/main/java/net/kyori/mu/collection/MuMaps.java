@@ -36,7 +36,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 /**
  * A collection of utilities for working with maps.
  */
-public interface MuMaps {
+public final class MuMaps {
+  private MuMaps() {
+  }
+
   /**
    * Computes the value of {@code key} via {@code function} if {@code map} does not have a mapping.
    *
@@ -51,7 +54,7 @@ public interface MuMaps {
    * @return the value
    * @see Map#computeIfAbsent(Object, Function)
    */
-  static <K, V> /* @Nullable */ V computeIfAbsent(final @NonNull Map<K, V> map, final /* @Nullable */ K key, final @NonNull Function<K, V> function) {
+  public static <K, V> /* @Nullable */ V computeIfAbsent(final @NonNull Map<K, V> map, final /* @Nullable */ K key, final @NonNull Function<K, V> function) {
     V value = map.get(key);
     if(value == null) {
       value = function.apply(key);
@@ -77,7 +80,7 @@ public interface MuMaps {
    * @return the value
    * @see Map#computeIfAbsent(Object, Function)
    */
-  static <K, V> /* @Nullable */ V supplyIfAbsent(final @NonNull Map<K, V> map, final /* @Nullable */ K key, final @NonNull Supplier<V> supplier) {
+  public static <K, V> /* @Nullable */ V supplyIfAbsent(final @NonNull Map<K, V> map, final /* @Nullable */ K key, final @NonNull Supplier<V> supplier) {
     V value = map.get(key);
     if(value == null) {
       value = supplier.get();

@@ -29,8 +29,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * An exception handler that does nothing.
  */
-final class NopeExceptionHandler implements ExceptionHandler {
-  static final NopeExceptionHandler INSTANCE = new NopeExceptionHandler();
+/* package */ final class NopeExceptionHandler implements ExceptionHandler {
+  /* package */ static final NopeExceptionHandler INSTANCE = new NopeExceptionHandler();
 
   private NopeExceptionHandler() {
   }

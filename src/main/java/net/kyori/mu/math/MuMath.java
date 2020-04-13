@@ -320,4 +320,8 @@ public final class MuMath {
     }
     return sum;
   }
+
+  public static boolean equals(final double a, final double b) {
+    return Double.doubleToLongBits(a) == Double.doubleToLongBits(b);
+  }
 }

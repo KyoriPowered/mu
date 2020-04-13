@@ -34,7 +34,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * A collection of utilities for working with iterators.
  */
-public interface MuIterators {
+public final class MuIterators {
+  private MuIterators() {
+  }
+
   /**
    * Returns an iterator containing only {@code value}.
    *
@@ -42,7 +45,7 @@ public interface MuIterators {
    * @param <T> the value type
    * @return an iterator
    */
-  static <T> @NonNull Iterator<T> singleton(final @Nullable T value) {
+  public static <T> @NonNull Iterator<T> singleton(final @Nullable T value) {
     return new SingletonIterator<>(value);
   }
 }

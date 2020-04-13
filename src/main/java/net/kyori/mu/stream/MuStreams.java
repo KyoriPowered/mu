@@ -36,7 +36,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 /**
  * A collection of utilities for working with streams.
  */
-public interface MuStreams {
+public final class MuStreams {
+  protected MuStreams() {
+  }
+
   /**
    * Creates a stream whose elements are all the elements of the first stream followed by all the elements of the second stream, and so on.
    *
@@ -47,7 +50,7 @@ public interface MuStreams {
    */
   @SafeVarargs
   @SuppressWarnings({"unchecked", "varargs"})
-  static <T> @NonNull Stream<T> concat(final Stream<? extends T>... streams) {
+  public static <T> @NonNull Stream<T> concat(final Stream<? extends T>... streams) {
     return (Stream<T>) Stream.of(streams).reduce(Stream.empty(), Stream::concat);
   }
 
@@ -58,7 +61,7 @@ public interface MuStreams {
    * @param <E> the element type
    * @return a stream
    */
-  static <E> @NonNull Stream<E> of(final @NonNull Iterable<E> iterable) {
+  public static <E> @NonNull Stream<E> of(final @NonNull Iterable<E> iterable) {
     if(iterable instanceof Collection<?>) {
       return ((Collection<E>) iterable).stream();
     }
@@ -72,7 +75,7 @@ public interface MuStreams {
    * @param <T> the type
    * @return a stream
    */
-  static <T> @NonNull Stream<T> of(final @NonNull Optional<T> optional) {
+  public static <T> @NonNull Stream<T> of(final @NonNull Optional<T> optional) {
     return optional.map(Stream::of).orElse(Stream.empty());
   }
 
@@ -84,7 +87,7 @@ public interface MuStreams {
    * @param <T> the type
    * @return a stream
    */
-  static <T> @NonNull Stream<T> cast(final @NonNull Stream<?> stream, final @NonNull Class<T> type) {
+  public static <T> @NonNull Stream<T> cast(final @NonNull Stream<?> stream, final @NonNull Class<T> type) {
     return stream.filter(type::isInstance).map(type::cast);
   }
 }

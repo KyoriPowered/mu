@@ -51,10 +51,8 @@ class AnnotationsTest {
   @Test
   void testFindDeclaredClass_local() {
     @Foo("class=x")
-    class X {
-    }
-    class Y extends B {
-    }
+    class X {}
+    class Y extends B {}
     assertAnnotationValue("class=x", Annotations.findDeclared(X.class, Foo.class));
     assertAnnotationValue("class=b", Annotations.findDeclared(Y.class, Foo.class));
   }

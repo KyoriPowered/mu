@@ -34,7 +34,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 /**
  * A collection of utilities for working with collections.
  */
-public interface MuCollections {
+public final class MuCollections {
+  private MuCollections() {
+  }
+
   /**
    * Reduces a collection to a single element of the inhabiting type depending on the collection's size.
    *
@@ -47,7 +50,7 @@ public interface MuCollections {
    * @param <E> the element type
    * @return an element
    */
-  static <E> /* @Nullable */ E reduce(final @NonNull Collection<? extends E> collection, final /* @Nullable */ E empty, final @NonNull Function<Iterable<? extends E>, ? extends E> reducer) {
+  public static <E> /* @Nullable */ E reduce(final @NonNull Collection<? extends E> collection, final /* @Nullable */ E empty, final @NonNull Function<Iterable<? extends E>, ? extends E> reducer) {
     final int size = collection.size();
     if(size == 0) {
       return empty;

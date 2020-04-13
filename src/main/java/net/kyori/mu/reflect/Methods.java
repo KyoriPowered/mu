@@ -29,7 +29,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * A collection of utilities for working with methods.
  */
-final class Methods {
+/* package */ final class Methods {
   private Methods() {
   }
 

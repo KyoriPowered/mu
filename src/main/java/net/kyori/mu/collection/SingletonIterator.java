@@ -27,11 +27,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-final class SingletonIterator<T> implements Iterator<T> {
+/* package */ final class SingletonIterator<T> implements Iterator<T> {
   private final @Nullable T value;
   private boolean hasNext = true;
 
-  SingletonIterator(@Nullable final T value) {
+  /* package */ SingletonIterator(@Nullable final T value) {
     this.value = value;
   }
 

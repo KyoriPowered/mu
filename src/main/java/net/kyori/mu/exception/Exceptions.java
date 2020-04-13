@@ -30,7 +30,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 /**
  * A collection of methods for working with exceptions.
  */
-public interface Exceptions {
+public final class Exceptions {
+  private Exceptions() {
+  }
+
   /**
    * Re-throws an exception, sneakily.
    *
@@ -40,7 +43,7 @@ public interface Exceptions {
    * @throws E the exception
    */
   @SuppressWarnings("unchecked")
-  static <E extends Throwable> @NonNull RuntimeException rethrow(final @NonNull Throwable exception) throws E {
+  public static <E extends Throwable> @NonNull RuntimeException rethrow(final @NonNull Throwable exception) throws E {
     throw (E) exception;
   }
 
@@ -52,7 +55,7 @@ public interface Exceptions {
    * @param throwable the throwable
    * @return nothing
    */
-  static RuntimeException propagate(final @NonNull Throwable throwable) {
+  public static RuntimeException propagate(final @NonNull Throwable throwable) {
     throwIfUnchecked(throwable);
     throw new RuntimeException(throwable);
   }
@@ -65,7 +68,7 @@ public interface Exceptions {
    * @param <E> the exception type
    * @throws E the exception
    */
-  static <E extends Throwable> void throwIfInstanceOf(final @NonNull Throwable throwable, final @NonNull Class<E> type) throws E {
+  public static <E extends Throwable> void throwIfInstanceOf(final @NonNull Throwable throwable, final @NonNull Class<E> type) throws E {
     if(type.isInstance(throwable)) {
       throw type.cast(throwable);
     }
@@ -76,7 +79,7 @@ public interface Exceptions {
    *
    * @param throwable the throwable
    */
-  static void throwIfUnchecked(final @NonNull Throwable throwable) {
+  public static void throwIfUnchecked(final @NonNull Throwable throwable) {
     if(throwable instanceof RuntimeException) {
       throw (RuntimeException) throwable;
     }
@@ -91,7 +94,7 @@ public interface Exceptions {
    * @param throwable the throwable
    * @return the unwrapped throwable, or the original throwable
    */
-  static @NonNull Throwable unwrap(final @NonNull Throwable throwable) {
+  public static @NonNull Throwable unwrap(final @NonNull Throwable throwable) {
     if(throwable instanceof ExecutionException || throwable instanceof InvocationTargetException) {
       final /* @Nullable */ Throwable cause = throwable.getCause();
       if(cause != null) {
