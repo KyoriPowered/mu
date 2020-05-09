@@ -234,7 +234,7 @@ public final class MuMath {
    * @return a value
    */
   public static double random(final @NonNull Random random, final double min, final double max) {
-    return random.nextDouble() * (max - min) + min;
+    return (random.nextDouble() * (max - min)) + min;
   }
 
   /**
@@ -246,7 +246,7 @@ public final class MuMath {
    * @return a value
    */
   public static float random(final @NonNull Random random, final float min, final float max) {
-    return random.nextFloat() * (max - min) + min;
+    return (random.nextFloat() * (max - min)) + min;
   }
 
   /**
@@ -319,9 +319,5 @@ public final class MuMath {
       sum += values[i];
     }
     return sum;
-  }
-
-  public static boolean equals(final double a, final double b) {
-    return Double.doubleToLongBits(a) == Double.doubleToLongBits(b);
   }
 }
