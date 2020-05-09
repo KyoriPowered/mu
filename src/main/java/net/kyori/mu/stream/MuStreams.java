@@ -37,7 +37,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * A collection of utilities for working with streams.
  */
 public final class MuStreams {
-  protected MuStreams() {
+  private MuStreams() {
   }
 
   /**
